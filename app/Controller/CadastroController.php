@@ -13,28 +13,21 @@ Class CadastroController
 
     public function index()
     {
-        $p           = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
-        $loader      = new \Twig\Loader\FilesystemLoader('app/View/Html');
-        $twig        = new \Twig\Environment($loader);
-        $template    = $twig->load('Lista_cadastros.twig');
-        
-        $parametros = [
+        $p = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        carrega_twig('Lista_cadastros.twig', [
             'p'           => $p,
             'cabecalho'   => $this->model->execQuery("SELECT COLUMN_NAME fields FROM information_schema.columns WHERE table_schema = 'db_analise' AND table_name = '$p'"),
             'itens'       => $p != 'categorias' ? $this->model->execQuery("SELECT a.*, c.str_categoria FROM $p a INNER JOIN categorias c ON c.id = a.id_categoria ORDER BY a.id") : $this->model->execQuery("SELECT * FROM $p ORDER BY id"),
             'campeonatos' => $p == 'times' ? $this->model->execQuery("SELECT * FROM campeonatos ORDER BY str_campeonato") : ''
-        ];
-
-        $conteudo   = $template->render($parametros);
-        
-        echo $conteudo;
+        ]);
     }
 
     public function inclusao()
     {
         $p = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->carrega_twig('Inclusao_cadastros.twig', [
+        carrega_twig('Inclusao_cadastros.twig', [
             'p'           => $p,
             'cabec'       => $this->model->execQuery("SELECT COLUMN_NAME fields FROM information_schema.columns WHERE table_schema = 'db_analise' AND table_name = '$p'"),
             'campeonatos' => $p == 'times' ? $this->model->execQuery("SELECT * FROM campeonatos ORDER BY str_campeonato") : '',
@@ -46,7 +39,7 @@ Class CadastroController
     {
         $p = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->carrega_twig('Alteracao_cadastros.twig', [
+        carrega_twig('Alteracao_cadastros.twig', [
             'p'           => $p,
             'id'          => $id,
             'op'          => filter_input(INPUT_GET, 'op', FILTER_SANITIZE_SPECIAL_CHARS),
@@ -61,7 +54,7 @@ Class CadastroController
     {
         $p = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->carrega_twig('Visualizacao_cadastros.twig', [
+        carrega_twig('Visualizacao_cadastros.twig', [
             'p'           => $p,
             'id'          => $id,
             'op'          => filter_input(INPUT_GET, 'op', FILTER_SANITIZE_SPECIAL_CHARS),
@@ -76,7 +69,7 @@ Class CadastroController
     {
         $p = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->carrega_twig('Exclusao_cadastros.twig', [
+        carrega_twig('Exclusao_cadastros.twig', [
             'p'           => $p,
             'id'          => $id,
             'op'          => filter_input(INPUT_GET, 'op', FILTER_SANITIZE_SPECIAL_CHARS),
@@ -85,17 +78,6 @@ Class CadastroController
             'dados'       => $this->model->execQuery("SELECT * FROM $p WHERE id = $id", false, false),
             'categorias'  => $p != 'categorias' ? $this->model->execQuery("SELECT c.id, c.str_categoria FROM categorias c ORDER BY c.id") : ''
         ]);
-    }
-
-    public function carrega_twig($twig_arq, $parametros)
-    {
-        $loader          = new \Twig\Loader\FilesystemLoader('app/View/Html');
-        $twig            = new \Twig\Environment($loader);
-        $template        = $twig->load($twig_arq);
-
-        $conteudo = $template->render($parametros);
-        
-        echo $conteudo;
     }
 
     public function salvaInclusao()
@@ -168,7 +150,7 @@ Class CadastroController
 
         //-- verifica a extensao do arquivo
         if (!in_array($ext, $arr_ext)) {
-            alert('Extensão (' . $ext . ') não permitida!');
+            alert('Extensï¿½o (' . $ext . ') nï¿½o permitida!');
             return false;
 
             //-- verifica o tamanho do arquivo
