@@ -268,3 +268,14 @@ function mime2ext($mime)
 
     return isset($mime_map[$mime]) ? $mime_map[$mime] : '';
 }
+
+function carrega_twig($twig_arq, $parametros)
+{
+    $loader          = new \Twig\Loader\FilesystemLoader('app/View/Html');
+    $twig            = new \Twig\Environment($loader);
+    $template        = $twig->load($twig_arq);
+
+    $conteudo = $template->render($parametros);
+    
+    echo $conteudo;
+}
