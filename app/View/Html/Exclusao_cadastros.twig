@@ -1,0 +1,284 @@
+<style>
+    .vscomp-toggle-button {
+        padding: 10px 30px 10px 10px;
+        border-radius: 5px;
+    }
+
+    #multipleSelect {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    #divFormulario {
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow: 8px 8px 8px 8px #B9B9B9;
+        position: relative;
+        margin-top: 5%;
+        background-color: #fff;
+    }
+    
+    #div_span_logo {
+        margin-bottom: 5px;
+    }
+
+    #span_logo {
+        color: blue;
+        background-color: #FAE8CD;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    #i_remove_logo {
+        font-size: 14px;
+        border: 1px solid #d9534f;
+        background-color: #d9534f;
+        color: #ffffff;
+        border-radius: 5px;
+        padding: 5px 10px 5px 10px;
+    }
+
+    #i_remove_logo:hover {
+        background-color: #c9302c;
+        border-color: #c9302c;
+        cursor: pointer;
+    }
+</style>
+
+<link rel="stylesheet" type="text/css" href="vendor/virtual_select/virtual-select.min.css"></link>
+<script src="vendor/virtual_select/virtual-select.min.js"></script>
+<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+
+<link rel="stylesheet" href="vendor/multi-select-tag/css/multi-select-tag.css">
+<script src="vendor/multi-select-tag/js/multi-select-tag.js"></script>
+
+<div class="container" id="divFormulario">
+    <h2 align="center">Cadastro de {{ p|capitalize }} (Exclusão)</h1>
+
+    <form method="post" action="?p=cadastro&op=salvaExclusao&tab={{ p }}&id={{ id }}" enctype="multipart/form-data">
+        <div class="container">
+            {% if p == 'categorias' %}
+
+                <div class="row g-2">
+                    <div class="col">
+                        <label for="str_categoria" class="form-label">Categoria</label>
+                        <input type="text" class="form-control" id="str_categoria" name="str_categoria" value="{{ dados.str_categoria }}" disabled>
+                    </div>
+                </div>
+
+            {% elseif p == 'mercados' %}
+
+                <div class="row g-2">
+                    <div class="col">
+                        <label for="str_mercado" class="form-label">Mercado</label>
+                        <input type="text" class="form-control" id="str_mercado" name="str_mercado"  value="{{ dados.str_mercado }}" disabled>
+                    </div>
+                    <div class="col">
+                        <label for="str_categoria" class="form-label">Categoria</label>
+                        <select class="form-select" aria-label="Default select example" name="id_categoria" disabled>
+                            <option value="">Selecione a Categoria</option>
+
+                            {% for c in categorias %}
+                                {% if c.id == dados.id_categoria %}
+                                    <option value="{{ c.id }}" selected>{{ c.str_categoria }}</option>
+                                {% else %}
+                                    <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+            {% elseif p == 'campeonatos' %}
+
+                <div class="">
+                    <div class="col">
+                        <label for="str_campeonato" class="form-label">Campeonato</label>
+                        <input type="text" class="form-control" id="str_campeonato" name="str_campeonato" value="{{ dados.str_campeonato }}" disabled>
+                    </div>
+                    <div class="col">
+                        <label for="str_categoria" class="form-label">Categoria</label>
+                        <select class="form-select" aria-label="Default select example" name="id_categoria" disabled>
+                            <option value="">Selecione a Categoria</option>
+
+                            {% for c in categorias %}
+                                {% if c.id == dados.id_categoria %}
+                                    <option value="{{ c.id }}" selected>{{ c.str_categoria }}</option>
+                                {% else %}
+                                    <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {% if dados.str_logo != '' %}
+                        <div id="div_logo_opcao_1">
+                            <div class="mb-3">
+                                <label for="formFileSm" class="form-label">Logo</label>
+                                <input type="hidden" name="str_logo" id="str_logo" value="{{ dados.str_logo }}"></input>
+                                
+                                <br>
+                                
+                                <div id="divImgLogo" style="display: inline-block; border: 1px solid black; padding: 2px; border-radius: 5px;"><img src="{{ dados.str_logo }}"></div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="mb-3">
+                            <label for="formFileSm" class="form-label">Logo</label>
+                            <input class="form-control form-control-sm" id="formFileSm" type="file" name="str_logo" onchange="exibe_logo(event);">
+                        </div>
+                    {% endif %}
+                    
+                    <br>
+                    <div id="divImgLogo"></div>
+                </div>
+
+            {% elseif p == 'times' %}
+
+                <div class="col" id="div_str_time">
+                    <label for="str_time" class="form-label">Nome do Time</label>
+                    <input type="text" class="form-control" id="str_time" name="str_time" value="{{ dados.str_time }}" disabled>
+                </div>
+
+                <div class="col" id="div_id_categoria">
+                    <label for="str_categoria" class="form-label">Categoria</label>
+                    <select class="form-select" aria-label="Default select example" name="id_categoria" disabled>
+                        <option value="">Selecione a Categoria</option>
+
+                        {% for c in categorias %}
+                            {% if c.id == dados.id_categoria %}
+                                <option value="{{ c.id }}" selected>{{ c.str_categoria }}</option>
+                            {% else %}
+                                <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col" id="div_multipleSelect" {#style="display: none;"#}>
+                    <label for="str_campeonatos" class="form-label">Campeonatos</label>
+                    <br>
+                    <select id="multipleSelect" multiple name="str_campeonatos" placeholder="Campeonatos" data-search="true" data-silent-initial-value-set="true" disabled>
+                        {% for c in campeonatos %}
+                            <option value="{{ c.id }}">{{ c.str_campeonato }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% if dados.str_logo != '' %}
+                    <div id="div_logo_opcao_1">
+                        <div class="mb-3">
+                            <label for="formFileSm" class="form-label">Logo</label>
+                            <input type="hidden" name="str_logo" id="str_logo" value="{{ dados.str_logo }}"></input>
+                            
+                            <br>
+                            
+                            <div id="divImgLogo" style="display: inline-block; border: 1px solid black; padding: 2px; border-radius: 5px;"><img src="{{ dados.str_logo }}"></div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label for="formFileSm" class="form-label">Logo</label>
+                        <input class="form-control form-control-sm" id="formFileSm" type="file" name="str_logo" onchange="exibe_logo(event);" disabled>
+                    </div>
+                {% endif %}
+                
+                <br>
+                <div id="divImgLogo"></div>
+
+            {% endif %}
+
+            <br>
+            
+            <a class="btn btn-secondary" href="?p={{ p }}">Voltar</a>
+            <button type="submit" class="btn btn-danger">Excluir</button>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    iniciaSelect();
+    inicia_funcao_visualizacao();
+
+    function iniciaSelect() {
+
+        // MODELO 1
+        VirtualSelect.init({ 
+            ele: '#multipleSelect' 
+        });
+        
+        // MODELO 2
+        /*new MultiSelectTag('multipleSelect');*/
+    }
+
+    function inicia_funcao_visualizacao() {
+        if ( getURLPar('p') == 'times' && getURLPar('op') == 'visualizacao' ) {
+            filtra_campeonatos_visualizacao();
+        }
+    }
+
+    function alteracao_logo() {
+        $('#div_logo_opcao_1').remove();
+        $('#div_logo_opcao_2').css('display', 'block');
+    }
+
+    // Função que exibe logo na tela de inclusão.
+    function exibe_logo(event) {
+        const input = event.target;
+        const imagemContainer = document.getElementById('divImgLogo');
+
+      // Certifica-se de que um arquivo foi selecionado
+        if (input.files && input.files[0]) {
+            const leitor = new FileReader();
+
+            leitor.onload = function (e) {
+            // Cria um elemento de imagem e define o atributo src para a imagem carregada
+                const imagem = document.createElement('img');
+                imagem.src = e.target.result;
+
+                // Limpa o conteúdo anterior do contâiner de imagem e adiciona a nova imagem
+                imagemContainer.innerHTML = '';
+                imagemContainer.appendChild(imagem);
+            };
+
+            // Lê o conteúdo do arquivo como uma URL de dados
+            leitor.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function getURLPar(name) {        
+        return decodeURI(         
+            (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]     
+            ); 
+    }
+
+    function filtra_campeonatos_visualizacao() {
+        var select          = '';
+        var id_categoria    = {{ dados.id_categoria }};
+        var str_campeonatos = {{ dados.str_campeonatos|json_encode|raw }};
+        var campeonatos     = {{ campeonatos|json_encode|raw }};
+        str_campeonatos     = str_campeonatos.split(',');
+        
+        $('#multipleSelect').remove();
+
+        select += '<select id="multipleSelect" multiple name="str_campeonatos" placeholder="Campeonatos" data-search="true" data-silent-initial-value-set="true" disabled>';
+
+        $.each(campeonatos, function(index, camp) {
+            if ( camp['id_categoria'] == id_categoria ) {
+
+                if ( str_campeonatos.indexOf(String(camp.id)) !== -1 ) {
+                    select += '<option value="' + camp.id + '" selected>' + camp.str_campeonato + '</option>';
+                } else {
+                    select += '<option value="' + camp.id + '">' + camp.str_campeonato + '</option>';
+                }
+            }
+        });
+
+        select += '</select>';
+
+        $('#div_multipleSelect').append(select);
+
+        iniciaSelect();
+    }
+</script>

@@ -1,0 +1,185 @@
+<style>
+    .alRight {
+        text-align: right;
+    }    
+
+    #table{{ p|capitalize }} {
+        padding-top: 5px;
+    }
+
+    #table{{ p|capitalize }} th {
+        padding: 2px;
+        background-color: #128478;
+        color: #fff;
+        padding: 5px;
+        font-size: 16px;
+        text-align: left;
+        border-bottom: 2px solid #2980b9;
+        font-weight: bold;
+    }
+
+    #table{{ p|capitalize }}>tbody>tr>td {
+        font-family: Trebuchet MS;
+        vertical-align: middle;
+        padding: 2px;
+    }
+
+    #table{{ p|capitalize }}>tbody>tr>td:nth-child(1) {
+        width: 10%;
+    }
+
+    #table{{ p|capitalize }}>tbody>tr>td:nth-child(2) {
+        text-align: left;
+    }
+
+    .alCenter, #table{{ p|capitalize }}>thead>tr>th, #table{{ p|capitalize }}>tbody>tr>td {
+        text-align: center;
+    }
+
+    .alLeft {
+        text-align: left;
+    }
+
+    #icone_visualizar {
+        font-size: 18px;
+        border: 1px solid #5bc0de;
+        background-color: #5bc0de;
+        color: #ffffff;
+        border-radius: 5px;
+        padding: 5px 10px 5px 10px;
+    }
+
+    #icone_visualizar:hover {
+        background-color: #31b0d5;
+        border-color: #31b0d5;
+        cursor: pointer;
+    }
+
+    #icone_editar {
+        font-size: 18px;
+        border: 1px solid #f0ad4e;
+        background-color: #f0ad4e;
+        color: #ffffff;
+        border-radius: 5px;
+        padding: 5px 10px 5px 10px;
+    }
+
+    #icone_editar:hover {
+        background-color: #ec971f;
+        border-color: #ec971f;
+        cursor: pointer;
+    }
+
+    #icone_deletar {
+        font-size: 18px;
+        border: 1px solid #d9534f;
+        background-color: #d9534f;
+        color: #ffffff;
+        border-radius: 5px;
+        padding: 5px 10px 5px 10px;
+    }
+
+    #icone_deletar:hover {
+        background-color: #c9302c;
+        border-color: #c9302c;
+        cursor: pointer;
+    }
+
+    #div_card_tabela {
+        background-color: #ffffff;
+        border: 2px solid #B9B9B9;
+        border-radius: 15px;
+        width: 50%;
+        position: relative;
+        margin: auto;
+        margin-top: 40px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        box-shadow: 3px 3px 3px 3px #B9B9B9;
+    }
+
+    #divBotoes {
+        position: relative;
+        margin-top: 15px;
+        margin-left: 25%;
+    }
+
+    #botao_inclusao {
+        background-color: #5cb85c;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+</style>
+
+<h1 align="center">Tela de Cadastro de {{ p|capitalize }}</h1>
+
+<div id="div_card_tabela">
+    <div id="divTable{{ p|capitalize }}">
+        <table class="table table-striped table-bordered" id="table{{ p|capitalize }}" width="100%">
+            <thead>
+                <tr>
+                    {% for c in cabecalho %}
+                        <th>{{ c.fields|split('_')|last|upper }}</th>
+                    {% endfor %}
+
+                    <th width="25%">AÇÕES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in itens %}
+                    <tr class="linha_tabela">
+                        {% for c in cabecalho %}
+
+                            {% if c['fields'] == 'str_logo' %}
+                                <td><img src="{{ i[c['fields']] }}" width="40px;"></td>
+                            {% elseif c['fields'] == 'id_categoria' %}
+                                <td>{{ i['str_categoria'] }}</td>
+                            {% else %}
+
+                                {% if p == 'times' and c['fields'] == 'str_campeonatos' %}
+                                    <td>
+                                        {% for id_camp in i[c['fields']]|split(',') %}
+                                            {% for camp in campeonatos %}
+                                                {% if camp.id == id_camp %}
+                                                    <img src="{{ camp['str_logo'] }}" width="40px">
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </td>
+                                {% else %}
+                                    <td>{{ i[c['fields']] }}</td>
+                                {% endif %}
+
+                            {% endif %}
+
+                        {% endfor %}
+                        
+                        <td>
+                            <i class="fa-solid fa-eye" id="icone_visualizar" onclick="window.location='?p={{ p }}&op=visualizacao&id={{ i['id'] }}'"></i>
+                            <i class="fa-solid fa-pen-to-square" id="icone_editar" onclick="window.location='?p={{ p }}&op=alteracao&id={{ i['id'] }}'"></i>
+                            <i class="fa-solid fa-trash" id="icone_deletar" onclick="window.location='?p={{ p }}&op=exclusao&id={{ i['id'] }}'"></i>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="divBotoes">
+    <button type="button" class="btn" id="botao_inclusao" onclick="window.location='?p={{ p }}&op=inclusao'">Cadastrar Novo</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.table').DataTable({
+            "language": {
+                "url": "vendor/datatables.net/Portuguese-Brasil.json"
+            }
+        });
+    });
+</script>

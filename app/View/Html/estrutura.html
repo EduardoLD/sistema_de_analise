@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="iso-8859-1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sistema de Analises</title>
+        <style>
+            .nav-item:hover {
+                background-color: #0C544D;
+                border-radius: 10px;
+            }
+
+            body {
+                background-image: url('app/View/Img/Background/fundo_sistema_3.jpg');
+            }
+
+            #nav_menu {
+                background-color: #128478 !important;
+            }
+
+            #nav_menu .nav-link, #nav_menu .navbar-brand {
+                color: #fff;
+            }
+
+        </style>
+        <link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/7d7c9bd94f.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script src="js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </head>
+    <header>
+
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="nav_menu">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Sistema de Analises</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav" style="padding-left: 20px;">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="?p=home">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="?p=gestao">Gestão de Banca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="?p=analises">Análises</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Cadastros
+                        </a>
+                        <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="?p=campeonatos">Campeonatos</a></li>
+                        <li><a class="dropdown-item" href="?p=categorias">Categorias</a></li>
+                        <li><a class="dropdown-item" href="?p=times">Times</a></li>
+                        <li><a class="dropdown-item" href="?p=mercados">Mercados</a></li>
+                        </ul>
+                    </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+    <body>
+
+        <div id="conteudo">
+            {{ conteudo }}
+        </div>
+
+    </body>
+</html>

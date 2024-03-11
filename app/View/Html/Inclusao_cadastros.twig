@@ -1,0 +1,195 @@
+<style>
+    .vscomp-toggle-button {
+        padding: 10px 30px 10px 10px;
+        border-radius: 5px;
+    }
+
+    #multipleSelect {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    #divFormulario {
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow: 8px 8px 8px 8px #B9B9B9;
+        position: relative;
+        margin-top: 5%;
+        background-color: #fff;
+    }
+    
+</style>
+
+<link rel="stylesheet" type="text/css" href="vendor/virtual_select/virtual-select.min.css"></link>
+<script src="vendor/virtual_select/virtual-select.min.js"></script>
+<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+
+<link rel="stylesheet" href="vendor/multi-select-tag/css/multi-select-tag.css">
+<script src="vendor/multi-select-tag/js/multi-select-tag.js"></script>
+
+<div class="container" id="divFormulario">
+    <h2 align="center">Cadastro de {{ p|capitalize }} (Inclusão)</h1>
+
+    <form method="post" action="?p=cadastro&op=salvaInclusao&tab={{ p }}" enctype="multipart/form-data">
+        <div class="container">
+            {% if p == 'categorias' %}
+
+                <div class="row g-2">
+                    <div class="col">
+                        <label for="str_categoria" class="form-label">Categoria</label>
+                        <input type="text" class="form-control" id="str_categoria" name="str_categoria" required>
+                    </div>
+                </div>
+
+            {% elseif p == 'mercados' %}
+
+                <div class="row g-2">
+                    <div class="col">
+                        <label for="str_mercado" class="form-label">Mercado</label>
+                        <input type="text" class="form-control" id="str_mercado" name="str_mercado" required>
+                    </div>
+                    <div class="col">
+                        <label for="str_categoria" class="form-label">Categoria</label>
+                        <select class="form-select" aria-label="Default select example" name="id_categoria" required>
+                            <option value="">Selecione a Categoria</option>
+
+                            {% for c in categorias %}
+                                <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+            {% elseif p == 'campeonatos' %}
+
+                <div class="">
+                    <div class="col">
+                        <label for="str_campeonato" class="form-label">Campeonato</label>
+                        <input type="text" class="form-control" id="str_campeonato" name="str_campeonato" required>
+                    </div>
+                    <div class="col">
+                        <label for="str_categoria" class="form-label">Categoria</label>
+                        <select class="form-select" aria-label="Default select example" name="id_categoria" required>
+                            <option value="">Selecione a Categoria</option>
+
+                            {% for c in categorias %}
+                                <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFileSm" class="form-label">Selecione a logo</label>
+                        <input class="form-control form-control-sm" id="formFileSm" type="file" name="str_logo" onchange="exibe_logo(event);">
+                    </div>
+                    <br>
+                    <div id="divImgLogo"></div>
+                </div>
+
+            {% elseif p == 'times' %}
+
+                <div class="col" id="div_str_time">
+                    <label for="str_time" class="form-label">Nome do Time</label>
+                    <input type="text" class="form-control" id="str_time" name="str_time" required>
+                </div>
+
+                <div class="col" id="div_id_categoria">
+                    <label for="str_categoria" class="form-label">Categoria</label>
+                    <select class="form-select" aria-label="Default select example" name="id_categoria" onchange="filtra_campeonatos(this.value, `{{ campeonatos|json_encode }}`);" required>
+                        <option value="">Selecione a Categoria</option>
+
+                        {% for c in categorias %}
+                            <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col" id="div_multipleSelect">
+                    <label for="str_campeonatos" class="form-label">Campeonatos</label>
+                    <br>
+                    <select id="multipleSelect" multiple name="str_campeonatos" placeholder="Campeonatos" data-search="true" data-silent-initial-value-set="true">
+                        {# {% for c in campeonatos %}
+                            <option value="{{ c.id }}">{{ c.str_campeonato }}</option>
+                        {% endfor %} #}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="formFileSm" class="form-label">Selecione a logo</label>
+                    <input class="form-control form-control-sm" id="formFileSm" type="file" name="str_logo" onchange="exibe_logo(event);">
+                </div>
+                <br>
+                <div id="divImgLogo"></div>
+
+            {% endif %}
+
+            <br>
+            
+            <a class="btn btn-secondary" href="?p={{ p }}">Voltar</a>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    iniciaSelect();
+
+    function iniciaSelect() {
+
+        // MODELO 1
+        VirtualSelect.init({ 
+            ele: '#multipleSelect' 
+        });
+
+        // MODELO 2
+        /*new MultiSelectTag('multipleSelect');*/
+    }
+
+    // Função que exibe logo na tela de inclusão.
+    function exibe_logo(event) {
+        const input = event.target;
+        const imagemContainer = document.getElementById('divImgLogo');
+
+      // Certifica-se de que um arquivo foi selecionado
+        if (input.files && input.files[0]) {
+            const leitor = new FileReader();
+
+            leitor.onload = function (e) {
+            // Cria um elemento de imagem e define o atributo src para a imagem carregada
+            const imagem = document.createElement('img');
+            imagem.src = e.target.result;
+
+            // Limpa o conteúdo anterior do contâiner de imagem e adiciona a nova imagem
+            imagemContainer.innerHTML = '';
+            imagemContainer.appendChild(imagem);
+            };
+
+            // Lê o conteúdo do arquivo como uma URL de dados
+            leitor.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function filtra_campeonatos(id_categoria, campeonatos) {
+        var select  = '';
+        campeonatos = JSON.parse(campeonatos);
+
+        // MODELO 2
+        //$('#multipleSelect').next().remove();
+
+        $('#multipleSelect').remove();
+
+        select += '<select id="multipleSelect" multiple name="str_campeonatos" placeholder="Campeonatos" data-search="true" data-silent-initial-value-set="true">';
+
+        $.each(campeonatos, function(index, camp) {
+            if ( camp['id_categoria'] == id_categoria ) {
+                select += '<option value="' + camp.id + '">' + camp.str_campeonato + '</option>';
+            }
+        });
+
+        select += '</select>';
+
+        $('#div_multipleSelect').append(select);
+
+        iniciaSelect();
+    }
+</script>
