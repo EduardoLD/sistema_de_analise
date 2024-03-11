@@ -23,11 +23,32 @@
         font-size: 24px;
     }
 
+    #table_dados_gestao p {
+        font-weight: bold;
+    }
+
 </style>
 
 <div id="div_card_gestao">
-    {% if existe_gestao %}
-        <h1>existe gestao</h1>
+    {% if gestao %}
+        <div id="div_dados_gestao">
+            <h1 align="center">{{ gestao.str_gestao }}</h1>
+
+            <table class="table" id="table_dados_gestao">
+                <tbody>
+                    <tr>
+                        <td><p>Data de Início: {{ gestao.dat_inicio|date('d/m/Y') }}</p></td>
+                        <td><p>Meta Diária: {{ gestao.flo_meta_diaria_porc|number_format(2, ',', '.') }}%</p></td>
+                        <td><p>Stoploss Diário: {{ gestao.flo_stoploss_porc|number_format(2, ',', '.') }}%</p></td>
+                    </tr>
+                        <td><p>Banca Inicial: R$ {{ gestao.flo_banca_inicial|number_format(2, ',', '.') }}</p></td>
+                        <td><p>Banca Atual: R$ {{ gestao.flo_banca_final|number_format(2, ',', '.') }}</p></td>
+                        <td><p>Lucro / Prejuízo: R$ {{ (gestao.flo_banca_final - gestao.flo_banca_inicial)|number_format(2, ',', '.') }}</p></td>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <div id="div_botao_cadastro_gestao" class="d-grid gap-2">
             <button type="button" class="btn btn-primary" id="botao_cadastro_gestao" onclick="window.location='?p={{ p }}&op=inclusao'">Cadastrar Nova Gestão</button>
