@@ -124,6 +124,36 @@
                 <br>
                 <div id="divImgLogo"></div>
 
+            {% elseif p == 'gestao' %}
+
+                <div class="col" id="div_str_gestao">
+                    <label for="str_gestao" class="form-label">Nome da Gestão</label>
+                    <input type="text" class="form-control" id="str_gestao" name="str_gestao" required>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col">
+                        <label for="flo_banca_inicial" class="form-label">Banca Inicial R$:</label>
+                        <input type="number" class="form-control" id="flo_banca_inicial" step="0.01" name="flo_banca_inicial" placeholder="Insira o valor da banca inicial. Ex: 100,00" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="flo_stoploss_porc" class="form-label">Stoploss Diário %:</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="flo_stoploss_porc" step="0.01" name="flo_stoploss_porc" placeholder="Insira um valor em %. Ex: 5,00" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label for="flo_meta_diaria_porc" class="form-label">Meta Diária %:</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="flo_meta_diaria_porc" step="0.01" name="flo_meta_diaria_porc" placeholder="Insira um valor em %. Ex: 5,00" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </div>
+
             {% endif %}
 
             <br>

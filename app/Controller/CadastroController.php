@@ -86,7 +86,14 @@ Class CadastroController
         $post   = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $mypost = array_map_recursive( fn($e) => html_entity_decode(htmlentities($e, ENT_QUOTES, 'UTF-8'), ENT_QUOTES , 'UTF-8') , $_POST);
         $cabec  = $this->model->execQuery("SELECT COLUMN_NAME fields FROM information_schema.columns WHERE table_schema = 'db_analise' AND table_name = '$tab' AND COLUMN_NAME <> 'id'");
-        
+
+        if ( $tab == 'gestao' ) {
+            $mypost += [
+                'dat_inicio'      => date('Y-m-d'),
+                'flo_banca_final' => $mypost['flo_banca_inicial']
+            ];
+        }
+
         $this->model->insert($tab, $mypost, 1);
         
         $insert_id = $_SESSION['insert_id'];

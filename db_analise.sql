@@ -1,18 +1,15 @@
 -- --------------------------------------------------------
 -- Servidor:                     127.0.0.1
--- Versão do servidor:           10.4.32-MariaDB - mariadb.org binary distribution
+-- Versão do servidor:           10.4.28-MariaDB - mariadb.org binary distribution
 -- OS do Servidor:               Win64
--- HeidiSQL Versão:              12.4.0.6659
+-- HeidiSQL Versão:              11.0.0.5919
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
 -- Copiando estrutura do banco de dados para db_analise
@@ -32,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `campeonatos` (
 
 -- Copiando dados para a tabela db_analise.campeonatos: ~11 rows (aproximadamente)
 DELETE FROM `campeonatos`;
+/*!40000 ALTER TABLE `campeonatos` DISABLE KEYS */;
 INSERT INTO `campeonatos` (`id`, `str_campeonato`, `str_logo`, `id_categoria`) VALUES
 	(1, 'Premier League', 'app/View/Img/Logos/Campeonatos/1.png', 1),
 	(2, 'La Liga', 'app/View/Img/Logos/Campeonatos/2.png', 1),
@@ -44,6 +42,7 @@ INSERT INTO `campeonatos` (`id`, `str_campeonato`, `str_logo`, `id_categoria`) V
 	(9, 'Libertadores', 'app/View/Img/Logos/Campeonatos/9.png', 1),
 	(10, 'NBA', 'app/View/Img/Logos/Campeonatos/10.png', 2),
 	(11, 'Campeonato Italiano (Série A)', 'app/View/Img/Logos/Campeonatos/11.png', 1);
+/*!40000 ALTER TABLE `campeonatos` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.categorias
 DROP TABLE IF EXISTS `categorias`;
@@ -55,11 +54,13 @@ CREATE TABLE IF NOT EXISTS `categorias` (
 
 -- Copiando dados para a tabela db_analise.categorias: ~4 rows (aproximadamente)
 DELETE FROM `categorias`;
+/*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
 INSERT INTO `categorias` (`id`, `str_categoria`) VALUES
 	(1, 'Futebol'),
 	(2, 'Basquete'),
 	(3, 'Esports'),
 	(4, 'Tenis');
+/*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.confrontos
 DROP TABLE IF EXISTS `confrontos`;
@@ -82,8 +83,10 @@ CREATE TABLE IF NOT EXISTS `confrontos` (
 
 -- Copiando dados para a tabela db_analise.confrontos: ~0 rows (aproximadamente)
 DELETE FROM `confrontos`;
+/*!40000 ALTER TABLE `confrontos` DISABLE KEYS */;
 INSERT INTO `confrontos` (`id`, `str_status`, `id_campeonato`, `id_time1`, `id_time2`, `int_gols_time1`, `int_gols_time2`, `int_escanteios_time1`, `int_escanteios_time2`, `int_cartoes_am_time1`, `int_cartoes_am_time2`, `int_cartoes_ver_time1`, `int_cartoes_ver_time2`) VALUES
 	(1, 'P', 2, 3, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+/*!40000 ALTER TABLE `confrontos` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.failed_jobs
 DROP TABLE IF EXISTS `failed_jobs`;
@@ -101,24 +104,29 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 
 -- Copiando dados para a tabela db_analise.failed_jobs: ~0 rows (aproximadamente)
 DELETE FROM `failed_jobs`;
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.gestao
 DROP TABLE IF EXISTS `gestao`;
 CREATE TABLE IF NOT EXISTS `gestao` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `str_gestao` varchar(50) NOT NULL,
-  `flo_banca_inicial` float NOT NULL DEFAULT 0,
+  `flo_banca_inicial` decimal(20,2) NOT NULL DEFAULT 0.00,
   `dat_inicio` date DEFAULT NULL,
-  `flo_stoploss` decimal(20,6) NOT NULL DEFAULT 0.000000,
+  `flo_stoploss_porc` decimal(20,2) NOT NULL DEFAULT 0.00,
   `dat_fim` date DEFAULT NULL,
-  `flo_banca_final` decimal(20,6) NOT NULL DEFAULT 0.000000,
+  `flo_banca_final` decimal(20,2) NOT NULL DEFAULT 0.00,
+  `flo_meta_diaria_porc` decimal(20,2) NOT NULL DEFAULT 0.00,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Copiando dados para a tabela db_analise.gestao: ~0 rows (aproximadamente)
 DELETE FROM `gestao`;
-INSERT INTO `gestao` (`id`, `str_gestao`, `flo_banca_inicial`, `dat_inicio`, `flo_stoploss`, `dat_fim`, `flo_banca_final`) VALUES
-	(1, 'Teste Gestão', 100, '2024-03-06', 10.000000, '2024-03-06', 0.000000);
+/*!40000 ALTER TABLE `gestao` DISABLE KEYS */;
+INSERT INTO `gestao` (`id`, `str_gestao`, `flo_banca_inicial`, `dat_inicio`, `flo_stoploss_porc`, `dat_fim`, `flo_banca_final`, `flo_meta_diaria_porc`) VALUES
+	(1, 'Gestão de Teste', 100.00, '2024-03-11', 10.00, NULL, 100.00, 5.00);
+/*!40000 ALTER TABLE `gestao` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.mercados
 DROP TABLE IF EXISTS `mercados`;
@@ -131,6 +139,7 @@ CREATE TABLE IF NOT EXISTS `mercados` (
 
 -- Copiando dados para a tabela db_analise.mercados: ~45 rows (aproximadamente)
 DELETE FROM `mercados`;
+/*!40000 ALTER TABLE `mercados` DISABLE KEYS */;
 INSERT INTO `mercados` (`id`, `str_mercado`, `id_categoria`) VALUES
 	(1, 'Resultado Final: Casa', 1),
 	(2, 'Resultado Final: Fora', 1),
@@ -177,6 +186,7 @@ INSERT INTO `mercados` (`id`, `str_mercado`, `id_categoria`) VALUES
 	(43, '+0.5 Chutes a Gol', 1),
 	(44, '+1.5 Chutes a Gol', 1),
 	(45, '+2.5 Chutes ao Gol', 1);
+/*!40000 ALTER TABLE `mercados` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.migrations
 DROP TABLE IF EXISTS `migrations`;
@@ -189,11 +199,13 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 
 -- Copiando dados para a tabela db_analise.migrations: ~4 rows (aproximadamente)
 DELETE FROM `migrations`;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '2014_10_12_000000_create_users_table', 1),
 	(2, '2014_10_12_100000_create_password_reset_tokens_table', 1),
 	(3, '2019_08_19_000000_create_failed_jobs_table', 1),
 	(4, '2019_12_14_000001_create_personal_access_tokens_table', 1);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.password_reset_tokens
 DROP TABLE IF EXISTS `password_reset_tokens`;
@@ -206,6 +218,8 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
 
 -- Copiando dados para a tabela db_analise.password_reset_tokens: ~0 rows (aproximadamente)
 DELETE FROM `password_reset_tokens`;
+/*!40000 ALTER TABLE `password_reset_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_reset_tokens` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.personal_access_tokens
 DROP TABLE IF EXISTS `personal_access_tokens`;
@@ -227,6 +241,8 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 
 -- Copiando dados para a tabela db_analise.personal_access_tokens: ~0 rows (aproximadamente)
 DELETE FROM `personal_access_tokens`;
+/*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.times
 DROP TABLE IF EXISTS `times`;
@@ -239,13 +255,15 @@ CREATE TABLE IF NOT EXISTS `times` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Copiando dados para a tabela db_analise.times: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela db_analise.times: ~0 rows (aproximadamente)
 DELETE FROM `times`;
+/*!40000 ALTER TABLE `times` DISABLE KEYS */;
 INSERT INTO `times` (`id`, `str_time`, `str_logo`, `str_campeonatos`, `id_categoria`) VALUES
 	(1, 'Flamengo', 'app/View/Img/Logos/Times/1.png', '8,6,7,9', 1),
 	(2, 'Palmeiras', 'app/View/Img/Logos/Times/2.png', '8,6,7,9', 1),
 	(3, 'São Paulo', 'app/View/Img/Logos/Times/3.png', '8,7,9', 1),
 	(7, 'Arsenal', 'app/View/Img/Logos/Times/7.png', '1,5', 1);
+/*!40000 ALTER TABLE `times` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_analise.users
 DROP TABLE IF EXISTS `users`;
@@ -264,11 +282,11 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Copiando dados para a tabela db_analise.users: ~0 rows (aproximadamente)
 DELETE FROM `users`;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'Eduardo Lourenço Dias', 'dudu_dias.lourenco@hotmail.com', NULL, '$2y$12$8VI9a0L3CBzbY30LzLlkKOLPJt7eQlh0ipaODc2ZzBr.e97Ps3f9W', NULL, '2024-03-05 20:44:49', '2024-03-05 20:44:49');
+	(1, 'Eduardo Lourenço Dias', 'dudu_dias.lourenco@hotmail.com', NULL, '$2y$12$8VI9a0L3CBzbY30LzLlkKOLPJt7eQlh0ipaODc2ZzBr.e97Ps3f9W', NULL, '2024-03-05 17:44:49', '2024-03-05 17:44:49');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

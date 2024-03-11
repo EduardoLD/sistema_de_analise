@@ -1,14 +1,7 @@
 <?php
 
-Class GestaoController
+Class GestaoController extends CadastroController
 {
-    public function __construct()
-    {
-        global $p;
-    
-        $model = strToClass($p);
-        $this->model = new Model;
-    }
 
     public function index()
     {
@@ -16,7 +9,7 @@ Class GestaoController
         
         carrega_twig('Preview_gestao.twig', [
             'p'             => $p,
-            'existe_gestao' => $this->existeGestao()
+            'existe_gestao' => false//$this->existeGestao()
         ]);
     }
 
@@ -24,4 +17,5 @@ Class GestaoController
     {
         return $this->model->execQuery("SELECT * FROM gestao");
     }
+
 }
