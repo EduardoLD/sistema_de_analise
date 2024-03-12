@@ -1,90 +1,97 @@
 <style>
 
     body {
-        font-family: Arial, sans-serif;
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
         margin: 0;
         padding: 0;
-        background-color: #f5f5f5;
     }
 
     #div_card_gestao {
         background-color: #ffffff;
         border: 2px solid #B9B9B9;
         border-radius: 15px;
-        width: 60%;
-        margin: 20px auto; /* centraliza o card */
+        width: 80%;
+        margin: 20px auto;
         padding: 15px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-        text-align: center;
-        color: #333;
-    }
-
-    hr {
-        margin: 15px 0;
-        border: 0;
-        border-top: 1px solid #B9B9B9;
-    }
-
-    #table_dados_gestao {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
-
-    #table_dados_gestao td {
-        padding: 10px;
         text-align: center;
     }
 
-    #table_dados_gestao p {
-        font-weight: bold;
-        margin: 0;
-    }
-
-    #table_dados_gestao p span {
-        color: #007bff; /* Cor azul para destacar os valores */
-    }
-
-    #div_botao_cadastro_gestao {
-        text-align: center;
+    .dashboard {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: space-around;
         margin-top: 20px;
     }
 
-    #botao_cadastro_gestao {
+    .card {
+        background-color: #fff;
+        border: 2px solid #B9B9B9;
+        border-radius: 8px;
+        width: calc(25% - 20px);
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        display: inline-block;
+    }
+
+    .card i {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .card h3 {
+        margin: 10px 0;
+    }
+
+    .card p {
+        margin: 0;
         font-weight: bold;
-        font-size: 18px;
+        color: #007bff;
+    }
+
+    #div_lista_apostas {
+        margin-top: 20px;
+        gap: 10px;
+        justify-content: space-around;
+        border: 1px solid red;
+        border-radius: 5px;
+        width: 100%;
+        height: 40px;
     }
 
 </style>
 
 <div id="div_card_gestao">
     {% if gestao %}
-        <div id="div_dados_gestao">
-            <h1>{{ gestao.str_gestao }}</h1>
-            <hr>
-            <table id="table_dados_gestao">
-                <tbody>
-                    <tr>
-                        <td><p>Data de Início: <span>{{ gestao.dat_inicio|date('d/m/Y') }}</span></p></td>
-                        <td>
-                            <p>Meta Diária: </p>
-                            <p><span>{{ gestao.flo_meta_diaria_porc|number_format(2, ',', '.') }}% (R$ {{ ((gestao.flo_meta_diaria_porc / 100) * gestao.flo_banca_final)|number_format(2, ',', '.') }})</span></p>
-                        </td>
-                        <td>
-                            <p>Stoploss Diário:</p>
-                            <p><span>{{ gestao.flo_stoploss_porc|number_format(2, ',', '.') }}% (R$ {{ ((gestao.flo_stoploss_porc / 100) * gestao.flo_banca_final)|number_format(2, ',', '.') }})</span></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><p>Banca Inicial: <span>R$ {{ gestao.flo_banca_inicial|number_format(2, ',', '.') }}</span></p></td>
-                        <td><p>Banca Atual: <span>R$ {{ gestao.flo_banca_final|number_format(2, ',', '.') }}</span></p></td>
-                        <td><p>Lucro / Prejuízo: <span>R$ {{ (gestao.flo_banca_final - gestao.flo_banca_inicial)|number_format(2, ',', '.') }}</span></p></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="div_dados_gestao" class="dashboard">
+            <div class="card">
+                <i class="far fa-calendar-alt"></i>
+                <h3>Data de Início</h3>
+                <p>{{ gestao.dat_inicio|date('d/m/Y') }}</p>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-money-bill-wave"></i>
+                <h3>Banca Inicial / Atual</h3>
+                <p>R$ {{ gestao.flo_banca_inicial|number_format(2, ',', '.') }} / R$ {{ gestao.flo_banca_final|number_format(2, ',', '.') }}</p>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Stoploss Diário</h3>
+                <p>{{ gestao.flo_stoploss_porc|number_format(2, ',', '.') }}% (R$ {{ gestao.flo_stoploss_val|number_format(2, ',', '.') }})</p>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-bullseye"></i>
+                <h3>Meta Diária</h3>
+                <p>{{ gestao.flo_meta_diaria_porc|number_format(2, ',', '.') }}% (R$ {{ gestao.flo_meta_diaria_val|number_format(2, ',', '.') }})</p>
+            </div>
+        </div>
+        <div id="div_lista_apostas">
         </div>
     {% else %}
         <div id="div_botao_cadastro_gestao">
