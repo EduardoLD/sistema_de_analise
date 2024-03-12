@@ -61,7 +61,7 @@
         width: 100%;
     }
 
-    #icone_visualizar {
+    #icone_informar_resultado {
         font-size: 14px;
         border: 1px solid #5bc0de;
         background-color: #5bc0de;
@@ -70,7 +70,7 @@
         padding: 3px 8px 3px 8px;
     }
 
-    #icone_visualizar:hover {
+    #icone_informar_resultado:hover {
         background-color: #31b0d5;
         border-color: #31b0d5;
         cursor: pointer;
@@ -142,19 +142,19 @@
 
         <div id="div_lista_apostas">
             <div id="div_lista_entradas_encerradas">
-                <table id="table_lista_entradas_encerradas" class="table table-bordered table-striped">
+                <table id="table_lista_entradas_encerradas" class="table table-info table-bordered">
                     <thead>
                         <tr>
                             <th colspan="7">Entradas Resolvidas</th>
                         </tr>
                         <tr>
-                            <th>Data</th>
-                            <th>Tipo</th>
-                            <th>Odd</th>
-                            <th>Investido</th>
-                            <th>Retorno</th>
-                            <th>Resultado</th>
-                            <th>Ações</th>
+                            <th width="10%">Data</th>
+                            <th width="10%">Tipo</th>
+                            <th width="10%">Odd</th>
+                            <th width="15%">Investido</th>
+                            <th width="15%">Retorno</th>
+                            <th width="10%">Resultado</th>
+                            <th width="20%">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -166,7 +166,6 @@
                             <td>R$ 22,00</td>
                             <td>Ganho</td>
                             <td>
-                                <i class="fa-solid fa-eye" id="icone_visualizar" onclick=""></i>
                                 <i class="fa-solid fa-pen-to-square" id="icone_editar" onclick=""></i>
                                 <i class="fa-solid fa-trash" id="icone_deletar" onclick=""></i>
                             </td>
@@ -179,7 +178,6 @@
                             <td>R$ 10,00</td>
                             <td>Cash Out</td>
                             <td>
-                                <i class="fa-solid fa-eye" id="icone_visualizar" onclick=""></i>
                                 <i class="fa-solid fa-pen-to-square" id="icone_editar" onclick=""></i>
                                 <i class="fa-solid fa-trash" id="icone_deletar" onclick=""></i>
                             </td>
@@ -189,19 +187,19 @@
             </div>
 
             <div id="div_lista_entradas_pendentes">
-                <table id="table_lista_entradas_pendentes" class="table table-bordered table-striped">
+                <table id="table_lista_entradas_pendentes" class="table table-warning table-bordered">
                     <thead>
                         <tr>
                             <th colspan="7">Entradas Abertas</th>
                         </tr>
                         <tr>
-                            <th>Data</th>
-                            <th>Tipo</th>
-                            <th>Odd</th>
-                            <th>Investido</th>
-                            <th>Retorno</th>
-                            <th>Resultado</th>
-                            <th>Ações</th>
+                            <th width="10%">Data</th>
+                            <th width="10%">Tipo</th>
+                            <th width="10%">Odd</th>
+                            <th width="15%">Investido</th>
+                            <th width="15%">Retorno</th>
+                            <th width="10%">Resultado</th>
+                            <th width="20%">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -213,7 +211,7 @@
                             <td>R$ 22,00</td>
                             <td></td>
                             <td>
-                                <i class="fa-solid fa-eye" id="icone_visualizar" onclick=""></i>
+                                <i class="fas fa-file-invoice-dollar" id="icone_informar_resultado" onclick=""></i>
                                 <i class="fa-solid fa-pen-to-square" id="icone_editar" onclick=""></i>
                                 <i class="fa-solid fa-trash" id="icone_deletar" onclick=""></i>
                             </td>
@@ -226,21 +224,25 @@
                             <td>R$ 25,00</td>
                             <td></td>
                             <td>
-                                <i class="fa-solid fa-eye" id="icone_visualizar" onclick=""></i>
+                                <i class="fas fa-file-invoice-dollar" id="icone_informar_resultado" onclick=""></i>
                                 <i class="fa-solid fa-pen-to-square" id="icone_editar" onclick=""></i>
                                 <i class="fa-solid fa-trash" id="icone_deletar" onclick=""></i>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
+                <div id="div_botao_cadastro_entrada" class="d-grid col-6 mx-auto">
+                    <button type="button" class="btn btn-success" id="botao_cadastro_entrada" onclick="">Nova Entrada</button>
+                </div>
             </div>
 
             <div id="div_lista_entradas_pendentes">
             </div>
         </div>
     {% else %}
-        <div id="div_botao_cadastro_gestao">
-            <button type="button" id="botao_cadastro_gestao" onclick="window.location='?p={{ p }}&op=inclusao'">Cadastrar Nova Gestão</button>
+        <div id="div_botao_cadastro_gestao" class="d-grid mx-auto">
+            <button type="button" id="botao_cadastro_gestao" class="btn btn-primary" onclick="window.location='?p={{ p }}&op=inclusao'">Cadastrar Nova Gestão</button>
         </div>
     {% endif %}
 </div>
