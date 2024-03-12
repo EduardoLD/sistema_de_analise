@@ -108,6 +108,21 @@
 
     #div_lista_apostas table th, #div_lista_apostas table td {
         padding: 1px;
+        font-weight: bold;
+    }
+
+    /*Primeira linha do thead*/
+    #table_lista_entradas_encerradas>thead>tr:nth-child(1)>th:nth-child(1) {
+        background-color: #98c0f6;
+    }
+
+    #table_lista_entradas_encerradas>thead>tr:nth-child(2)>th {
+        background-color: #005187;
+        color: #ffffff;
+    }
+
+    .table-striped>tbody>tr:nth-child(odd)>td {
+        background-color: #dceafc;
     }
 
 </style>
@@ -142,7 +157,7 @@
 
         <div id="div_lista_apostas">
             <div id="div_lista_entradas_encerradas">
-                <table id="table_lista_entradas_encerradas" class="table table-info table-bordered">
+                <table id="table_lista_entradas_encerradas" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th colspan="7">Entradas Resolvidas</th>
@@ -187,7 +202,7 @@
             </div>
 
             <div id="div_lista_entradas_pendentes">
-                <table id="table_lista_entradas_pendentes" class="table table-warning table-bordered">
+                <table id="table_lista_entradas_pendentes" class="table table-bordered">
                     <thead>
                         <tr>
                             <th colspan="7">Entradas Abertas</th>
