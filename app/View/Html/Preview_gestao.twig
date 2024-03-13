@@ -1,4 +1,4 @@
-<style>
+﻿<style>
 
     body {
         font-family: 'Arial', sans-serif;
@@ -67,7 +67,7 @@
         background-color: #5bc0de;
         color: #ffffff;
         border-radius: 5px;
-        padding: 3px 8px 3px 8px;
+        padding: 3px 6px 3px 6px;
     }
 
     #icone_informar_resultado:hover {
@@ -82,7 +82,7 @@
         background-color: #f0ad4e;
         color: #ffffff;
         border-radius: 5px;
-        padding: 3px 8px 3px 8px;
+        padding: 3px 6px 3px 6px;
     }
 
     #icone_editar:hover {
@@ -97,7 +97,7 @@
         background-color: #d9534f;
         color: #ffffff;
         border-radius: 5px;
-        padding: 3px 8px 3px 8px;
+        padding: 3px 6px 3px 6px;
     }
 
     #icone_deletar:hover {
@@ -108,11 +108,15 @@
 
     #div_lista_apostas table th, #div_lista_apostas table td {
         padding: 1px;
-        font-weight: bold;
     }
 
-    /*Primeira linha do thead*/
-    #table_lista_entradas_encerradas>thead>tr:nth-child(1)>th:nth-child(1) {
+    #div_lista_entradas_encerradas, #div_lista_entradas_pendentes {
+        border-radius: 10px;
+        padding: 5px;
+        margin: 10px;
+    }
+
+    #table_lista_entradas_encerradas>thead>tr:nth-child(1)>th {
         background-color: #98c0f6;
     }
 
@@ -125,6 +129,36 @@
         background-color: #dceafc;
     }
 
+    #table_lista_entradas_pendentes>thead>tr:nth-child(1)>th {
+        background-color: #a9c2ac;
+    }
+
+    #table_lista_entradas_pendentes>thead>tr:nth-child(2)>th {
+        background-color: #17301a;
+        color: #ffffff;
+    }
+
+    #botao_lista_entradas_resolvidas {
+        background-color: #0275d8;
+        color: #ffffff;
+    }
+
+    #botao_lista_entradas_resolvidas:hover {
+        background-color: #035ca9;
+    }
+
+    #div_botao_lista_entradas_resolvidas {
+        margin-bottom: 10px;
+    }
+
+    .btn {
+        font-weight: bold;
+    }
+
+    .dataTables_filter, .dataTables_length, .dataTables_paginate, .dataTables_info {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
 </style>
 
 <div id="div_card_gestao">
@@ -160,7 +194,7 @@
                 <table id="table_lista_entradas_encerradas" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th colspan="7">Entradas Resolvidas</th>
+                            <th colspan="7">Apostas Resolvidas</th>
                         </tr>
                         <tr>
                             <th width="10%">Data</th>
@@ -200,12 +234,12 @@
                     </tbody>
                 </table>
             </div>
-
+            <hr>
             <div id="div_lista_entradas_pendentes">
-                <table id="table_lista_entradas_pendentes" class="table table-bordered">
+                <table id="table_lista_entradas_pendentes" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th colspan="7">Entradas Abertas</th>
+                            <th colspan="7">Apostas Abertas</th>
                         </tr>
                         <tr>
                             <th width="10%">Data</th>
@@ -246,13 +280,10 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <div id="div_botao_cadastro_entrada" class="d-grid col-6 mx-auto">
-                    <button type="button" class="btn btn-success" id="botao_cadastro_entrada" onclick="">Nova Entrada</button>
+                
+                <div id="div_botao_cadastro_entrada" class="d-grid col-2 mx-auto">
+                    <button type="button" class="btn btn-success" id="botao_cadastro_entrada" onclick="">Nova Aposta</button>
                 </div>
-            </div>
-
-            <div id="div_lista_entradas_pendentes">
             </div>
         </div>
     {% else %}
@@ -261,3 +292,13 @@
         </div>
     {% endif %}
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('.table').DataTable({
+            "language": {
+                "url": "vendor/datatables.net/Portuguese-Brasil.json"
+            }
+        });
+    });
+</script>
