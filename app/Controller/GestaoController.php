@@ -30,4 +30,11 @@ Class GestaoController extends CadastroController
             'flo_meta_diaria_val' => (($gestao['flo_meta_diaria_porc'] / 100) * $gestao['flo_banca_final'])
         ];
     }
+
+    public function inclusao_aposta()
+    {
+        $p = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        ver($p);
+    }
 }

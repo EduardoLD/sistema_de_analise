@@ -1,3 +1,10 @@
+<link rel="stylesheet" type="text/css" href="vendor/virtual_select/virtual-select.min.css"></link>
+<script src="vendor/virtual_select/virtual-select.min.js"></script>
+<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+
+<link rel="stylesheet" href="vendor/multi-select-tag/css/multi-select-tag.css">
+<script src="vendor/multi-select-tag/js/multi-select-tag.js"></script>
+
 <style>
     .vscomp-toggle-button {
         padding: 10px 30px 10px 10px;
@@ -24,15 +31,8 @@
     
 </style>
 
-<link rel="stylesheet" type="text/css" href="vendor/virtual_select/virtual-select.min.css"></link>
-<script src="vendor/virtual_select/virtual-select.min.js"></script>
-<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
-
-<link rel="stylesheet" href="vendor/multi-select-tag/css/multi-select-tag.css">
-<script src="vendor/multi-select-tag/js/multi-select-tag.js"></script>
-
 <div class="container" id="divFormulario">
-    <h2 align="center">Cadastro de {{ p|capitalize }} (Inclusão)</h1>
+    <h2 align="center">{{ p|capitalize }} (Inclusão)</h1>
 
     <form method="post" action="?p=cadastro&op=salvaInclusao&tab={{ p }}" enctype="multipart/form-data">
         <div class="container">
