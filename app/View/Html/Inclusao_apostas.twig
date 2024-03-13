@@ -1,3 +1,10 @@
+﻿<link rel="stylesheet" type="text/css" href="vendor/virtual_select/virtual-select.min.css"></link>
+<script src="vendor/virtual_select/virtual-select.min.js"></script>
+<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+
+<link rel="stylesheet" href="vendor/multi-select-tag/css/multi-select-tag.css">
+<script src="vendor/multi-select-tag/js/multi-select-tag.js"></script>
+
 <style>
     #divFormulario {
         border-radius: 10px;
@@ -11,6 +18,21 @@
     label {
         font-weight: bold;
     }
+
+    .select_campeonato {
+        min-width: 50%;
+        max-width: 50%;
+    }
+
+    .select_time {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .col {
+        padding: 3px;
+    }
+
 </style>
 
 <div class="container" id="divFormulario">
@@ -18,8 +40,8 @@
 
     <form method="post" action="?p={{ p }}&op=salvaInclusao" enctype="multipart/form-data">
 
-        <div class="container">
-            <div class="row g-2">
+        <div class="container" id="div_dados_gerais">
+            <div class="row">
                 <div class="col-2 mx-auto">
                     <label for="dat_data" class="form-label">Data</label>
                     <input id="dat_data" class="form-control" name="dat_data" type="date" required/>
@@ -48,49 +70,79 @@
                         <option value="M">Aposta Múltipla</option>
                     </select>
                 </div>
+            </div>
+        </div>
+        <div class="container" id="div_aposta">  
+            <div id="div_aposta_simples">
 
-                <hr>
-                
-                <div id="div_aposta_simples" class="col-6 mx-auto text-center align-items-center">
-                    <div class="row g-2 align-items-center">
-                        <div class="col-5 mx-auto">
-                            <label for="id_time_casa" class="form-label">Time da Casa</label>
-                            <select class="form-select" aria-label="Default select example" name="id_time_casa" required>
-                                <option value="">Time da Casa</option>
+                <div class="col text-center" id="div_campeonato">
+                    <label for="id_campeonato" class="form-label">Campeonato</label>
+                    <br>
+                    <select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
+                        <option value=""></option>
 
-                                {% for t in times %}
-                                    <option value="{{ t.id }}">{{ t.str_time }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        {% for c in campeonatos %}
+                            <option value="{{ c.id }}">{{ c.str_campeonato }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-                        <div class="col-2 mx-auto">
-                            <h1>X</h1>
-                        </div>
+                <div class="row align-items-center col-8 mx-auto text-center align-items-center">
+                    <div class="col mx-auto col-time">
+                        <label for="id_time_casa" class="form-label">Time Casa</label>
+                        <br>
+                        <select class="select_time" id="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true">
+                            {# <option value=""></option>
 
-                        <div class="col-5 mx-auto">
-                            <label for="id_time_visitante" class="form-label">Time Visitante</label>
-                            <select class="form-select" aria-label="Default select example" name="id_time_visitante" required>
-                                <option value="">Time Visitante</option>
+                            {% for t in times %}
+                                <option value="{{ t.id }}">{{ t.str_time }}</option>
+                            {% endfor %} #}
+                        </select>
+                    </div>
 
-                                {% for t in times %}
-                                    <option value="{{ t.id }}">{{ t.str_time }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                    <div class="col mx-auto">
+                        <h1>X</h1>
+                    </div>
+
+                    <div class="col mx-auto col-time">
+                        <label for="id_time_visitante" class="form-label">Time Visitante</label>
+                        <br>
+                        <select class="select_time" id="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true">
+                            {# <option value=""></option>
+                            {% for t in times %}
+                                <option value="{{ t.id }}">{{ t.str_time }}</option>
+                            {% endfor %} #}
+                        </select>
                     </div>
                 </div>
             </div>
-
-            <br>
-            <a class="btn btn-secondary" href="?p=gestao">Voltar</a>
-            <button type="submit" class="btn btn-success">Salvar</button>
         </div>
+
+        <br>
+        <a class="btn btn-secondary" href="?p=gestao">Voltar</a>
+        <button type="submit" class="btn btn-success">Salvar</button>
 
     </form>
 </div>
 
 <script>
+    iniciaSelect();
+
+    function iniciaSelect() {
+
+        // MODELO 1
+        VirtualSelect.init({ 
+            ele: '#multipleSelect' 
+        });
+        
+        /* Remover valor inicial dos campos select*/
+        var divs = $('div').find('.has-value')
+        $(divs).removeClass('has-value');
+
+        // MODELO 2
+        /*new MultiSelectTag('multipleSelect');*/
+    }
+
     document.getElementById('dat_data').valueAsDate = new Date();
 
     function cria_opcao_aposta(opcao) {
