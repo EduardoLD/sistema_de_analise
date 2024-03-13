@@ -19,9 +19,9 @@
         font-weight: bold;
     }
 
-    .select_campeonato {
-        min-width: 50%;
-        max-width: 50%;
+    .select_campeonato, .select_categoria {
+        min-width: 80%;
+        max-width: 80%;
     }
 
     .select_time {
@@ -29,8 +29,8 @@
         max-width: 100%;
     }
 
-    .col {
-        padding: 3px;
+    #div_aposta_simples {
+        /*border: 1px solid blue;*/
     }
 
 </style>
@@ -74,21 +74,34 @@
         </div>
         <div class="container" id="div_aposta">  
             <div id="div_aposta_simples">
+                <div class="row mx-auto text-center align-items-center">
+                    <div class="col mx-auto" id="div_categoria">
+                        <label for="id_categoria" class="form-label">Categoria</label>
+                        <br>
+                        <select class="select_categoria" id="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
+                            <option value=""></option>
 
-                <div class="col text-center" id="div_campeonato">
-                    <label for="id_campeonato" class="form-label">Campeonato</label>
-                    <br>
-                    <select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
-                        <option value=""></option>
+                            {% for c in categorias %}
+                                <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-                        {% for c in campeonatos %}
-                            <option value="{{ c.id }}">{{ c.str_campeonato }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="col mx-auto" id="div_campeonato">
+                        <label for="id_campeonato" class="form-label">Campeonato</label>
+                        <br>
+                        <select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
+                            <option value=""></option>
+
+                            {% for c in campeonatos %}
+                                <option value="{{ c.id }}">{{ c.str_campeonato }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
 
-                <div class="row align-items-center col-8 mx-auto text-center align-items-center">
-                    <div class="col mx-auto col-time">
+                <div class="row col-11 mx-auto text-center align-items-center">
+                    <div class="col-5 mx-auto col-time">
                         <label for="id_time_casa" class="form-label">Time Casa</label>
                         <br>
                         <select class="select_time" id="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true">
@@ -100,11 +113,11 @@
                         </select>
                     </div>
 
-                    <div class="col mx-auto">
+                    <div class="col-1 mx-auto">
                         <h1>X</h1>
                     </div>
 
-                    <div class="col mx-auto col-time">
+                    <div class="col-5 mx-auto col-time">
                         <label for="id_time_visitante" class="form-label">Time Visitante</label>
                         <br>
                         <select class="select_time" id="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true">

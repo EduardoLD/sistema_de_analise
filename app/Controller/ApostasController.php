@@ -16,6 +16,7 @@ Class ApostasController
 
         carrega_twig('Inclusao_apostas.twig', [
             'p'           => $p,
+            'categorias'  => $this->model->execQuery("SELECT * FROM categorias ORDER BY str_categoria ASC"),
             'campeonatos' => $this->model->execQuery("SELECT * FROM campeonatos ORDER BY str_campeonato ASC"),
             'times'       => $this->model->execQuery("SELECT * FROM times ORDER BY str_time ASC")
         ]);
