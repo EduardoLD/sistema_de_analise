@@ -1,4 +1,4 @@
-Ôªø<link rel="stylesheet" type="text/css" href="vendor/virtual_select/virtual-select.min.css"></link>
+<link rel="stylesheet" type="text/css" href="vendor/virtual_select/virtual-select.min.css"></link>
 <script src="vendor/virtual_select/virtual-select.min.js"></script>
 <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
 
@@ -6,173 +6,116 @@
 <script src="vendor/multi-select-tag/js/multi-select-tag.js"></script>
 
 <style>
-    #divFormulario {
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #div_tudo {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    #div_formulario,
+    #div_bilhete {
         border-radius: 10px;
         padding: 5px;
+        border: 1px solid lightgrey;
         box-shadow: 8px 8px 8px 8px #B9B9B9;
-        position: relative;
-        margin-top: 5%;
+        margin: 1% 1%;
         background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        height: 90vh; /* Ajuste aqui para 90% da altura da viewport */
+        background-color: #e0ecf2;
+    }
+
+    #div_formulario {
+        flex: 3;
+    }
+
+    #div_bilhete {
+        flex: 1;
+    }
+
+    #cabecalho_formulario,
+    #cabecalho_bilhete,
+    #corpo_formulario,
+    #corpo_bilhete,
+    #rodape_formulario,
+    #rodape_bilhete {
+        flex-shrink: 0;
+    }
+
+    #cabecalho_formulario,
+    #cabecalho_bilhete,
+    #rodape_formulario,
+    #rodape_bilhete {
+        text-align: center;
+        background-color: #fff;
+        padding: 5px;
+        border-bottom: 1px solid lightgrey;
+    }
+
+    #cabecalho_formulario,
+    #cabecalho_bilhete {
+        height: 10%;
+    }
+
+    #corpo_formulario,
+    #corpo_bilhete {
+        border: 1px solid green;
+        position: relative;
+        height: 80%;
+    }
+
+    #rodape_formulario,
+    #rodape_bilhete {
+        border: 1px solid red;
+        position: relative;
+        height: 10%;
     }
 
     label {
         font-weight: bold;
     }
 
-    .select_campeonato, .select_categoria {
-        min-width: 80%;
-        max-width: 80%;
-    }
-
-    .select_time {
-        min-width: 100%;
-        max-width: 100%;
-    }
-
-    #div_aposta_simples {
-        /*border: 1px solid blue;*/
-    }
-
 </style>
 
-<div class="container" id="divFormulario">
-    <h2 align="center">{{ p|capitalize }} (Inclus√£o)</h1>
-
-    <form method="post" action="?p={{ p }}&op=salvaInclusao" enctype="multipart/form-data">
-
-        <div class="container" id="div_dados_gerais">
-            <div class="row">
-                <div class="col-2 mx-auto">
-                    <label for="dat_data" class="form-label">Data</label>
-                    <input id="dat_data" class="form-control" name="dat_data" type="date" required/>
-                </div>
-
-                <div class="col-2">
-                    <label for="flo_valor_entrada" class="form-label">Valor da Aposta R$:</label>
-                    <input type="number" class="form-control" id="flo_valor_entrada" step="0.01" name="flo_valor_entrada" required>
-                </div>
-
-                <div class="col-2 mx-auto">
-                    <label for="flo_odd_total" class="form-label">ODD Total:</label>
-                    <input type="number" class="form-control" id="flo_odd_total" step="0.01" name="flo_odd_total" value="0.00" readonly="readonly">
-                </div>
-
-                <div class="col">
-                    <label for="flo_valor_potencial" class="form-label">Ganhos Potenciais R$:</label>
-                    <input type="number" class="form-control" id="flo_valor_potencial" step="0.01" name="flo_valor_potencial" value="0.00" readonly="readonly">
-                </div>
-
-                <div class="col-4 mx-auto">
-                    <label for="str_tipo" class="form-label">Tipo de Aposta</label>
-                    <select class="form-select" aria-label="Default select example" name="str_tipo" onchange="cria_opcao_aposta(this.value);" required>
-                        <option value="">Selecione o Tipo de Aposta</option>
-                        <option value="S">Aposta Simples</option>
-                        <option value="M">Aposta M√∫ltipla</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="container" id="div_aposta">  
-            <div id="div_aposta_simples">
-                <div class="row mx-auto text-center align-items-center">
-                    <div class="col mx-auto" id="div_categoria">
-                        <label for="id_categoria" class="form-label">Categoria</label>
-                        <br>
-                        <select class="select_categoria" id="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
-                            <option value=""></option>
-
-                            {% for c in categorias %}
-                                <option value="{{ c.id }}">{{ c.str_categoria }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="col mx-auto" id="div_campeonato">
-                        <label for="id_campeonato" class="form-label">Campeonato</label>
-                        <br>
-                        <select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
-                            <option value=""></option>
-
-                            {% for c in campeonatos %}
-                                <option value="{{ c.id }}">{{ c.str_campeonato }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row col-11 mx-auto text-center align-items-center">
-                    <div class="col-5 mx-auto col-time">
-                        <label for="id_time_casa" class="form-label">Time Casa</label>
-                        <br>
-                        <select class="select_time" id="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true">
-                            {# <option value=""></option>
-
-                            {% for t in times %}
-                                <option value="{{ t.id }}">{{ t.str_time }}</option>
-                            {% endfor %} #}
-                        </select>
-                    </div>
-
-                    <div class="col-1 mx-auto">
-                        <h1>X</h1>
-                    </div>
-
-                    <div class="col-5 mx-auto col-time">
-                        <label for="id_time_visitante" class="form-label">Time Visitante</label>
-                        <br>
-                        <select class="select_time" id="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true">
-                            {# <option value=""></option>
-                            {% for t in times %}
-                                <option value="{{ t.id }}">{{ t.str_time }}</option>
-                            {% endfor %} #}
-                        </select>
-                    </div>
-                </div>
-            </div>
+<div id="div_tudo">
+    <div id="div_formulario">
+        <div id="cabecalho_formulario">
+            <h2 align="center">Criar Aposta</h2>
+            <hr>
         </div>
 
-        <br>
-        <a class="btn btn-secondary" href="?p=gestao">Voltar</a>
-        <button type="submit" class="btn btn-success">Salvar</button>
+        <div id="corpo_formulario">
+            <!-- Seu conte˙do do formul·rio aqui -->
+        </div>
 
-    </form>
+        <div id="rodape_formulario">
+            <!-- Seu rodapÈ do formul·rio aqui -->
+        </div>
+    </div>
+
+    <div id="div_bilhete">
+        <div id="cabecalho_bilhete">
+            <h2 align="center">Bilhete</h2>
+            <hr>
+        </div>
+
+        <div id="corpo_bilhete">
+            <!-- Seu conte˙do do bilhete aqui -->
+        </div>
+
+        <div id="rodape_bilhete">
+            <!-- Seu rodapÈ do bilhete aqui -->
+        </div>
+    </div>
 </div>
-
-<script>
-    iniciaSelect();
-
-    function iniciaSelect() {
-
-        // MODELO 1
-        VirtualSelect.init({ 
-            ele: '#multipleSelect' 
-        });
-        
-        /* Remover valor inicial dos campos select*/
-        var divs = $('div').find('.has-value')
-        $(divs).removeClass('has-value');
-
-        // MODELO 2
-        /*new MultiSelectTag('multipleSelect');*/
-    }
-
-    document.getElementById('dat_data').valueAsDate = new Date();
-
-    function cria_opcao_aposta(opcao) {
-        if ( opcao == 'S' ) {
-            cria_opcao_aposta_simples();
-        } else if ( opcao == 'M' ) {
-            cria_opcao_aposta_multipla();
-        } else {
-            //Fazer remover tudo.
-        }
-    }
-
-    function cria_opcao_aposta_simples() {
-        console.log('Aposta Simples');
-    }
-
-    function cria_opcao_aposta_multipla() {
-        console.log('Aposta M√∫ltipla');
-    }
-</script>
