@@ -8,28 +8,76 @@
         min-width: 80%;
         max-width: 80%;
     }
+
+    #div_categoria, #div_campeonato {
+        /*border: 1px solid red;*/
+    }
+
+    #row_times {
+        padding-top: 2%;
+        padding-bottom: 2%;
+    }
+
+    #div_time_casa, #div_time_fora {
+        background-color: orange;
+    }
+
+    #div_x {
+        background-color: green;
+    }
 </style>
 
-<div class="row text-center" id="div_formulario_aposta_simples">
-    <div class="col-6" id="div_categoria">
-        <label for="id_categoria" class="form-label col-auto">Categoria</label>
-        <br>
-        <select class="select_categoria" id="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
-            <option value=""></option>
+<div id="div_formulario_aposta_simples">
+    <div class="row text-center align-items-stretch">
+        <div class="col-6" id="div_categoria">
+            <label for="id_categoria" class="form-label col-auto">Categoria</label>
+            <br>
+            <select class="select_categoria" id="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
+                <option value=""></option>
 
-            {% for c in categorias %}
-                <option value="{{ c.id }}">{{ c.str_categoria }}</option>
-            {% endfor %}
-        </select>
+                {% for c in categorias %}
+                    <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-6" id="div_campeonato">
+            <label for="id_campeonato" class="form-label">Campeonato</label>
+            <br>
+            <select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
+            </select>
+        </div>
     </div>
+    <div class="row text-center align-items-stretch" id="row_times">
+        <div class="col-4 mx-auto col-time" id="div_time_casa">
+            <label for="id_time_casa" class="form-label">Time Casa</label>
+            <br>
+            <select class="select_time" id="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true">
+            </select>
+        </div>
 
-    <div class="col-6" id="div_campeonato">
-        <label for="id_campeonato" class="form-label">Campeonato</label>
-        <br>
-        <select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
-        </select>
+        <div class="col-1 mx-auto" id="logo_time_casa">
+        </div>
+
+        <div class="col-1 mx-auto" id="div_x">
+            <h1>X</h1>
+        </div>
+
+        <div class="col-1 mx-auto" id="logo_time_visitante">
+        </div>
+
+        <div class="col-4 mx-auto col-time" id="div_time_fora">
+            <label for="id_time_visitante" class="form-label">Time Visitante</label>
+            <br>
+            <select class="select_time" id="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true">
+            </select>
+        </div>
     </div>
 </div>
+
+{# <div class="row text-center">
+    
+</div> #}
 
 <script>
 
@@ -50,8 +98,6 @@
     }
 
     function filtra_campeonatos(id_categoria, campeonatos) {
-        console.log(id_categoria);
-        console.log(campeonatos);
         var select  = '';
 
         $('.select_campeonato').remove();
