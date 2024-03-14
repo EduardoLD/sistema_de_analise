@@ -51,13 +51,13 @@
     #rodape_formulario,
     #rodape_bilhete {
         flex-shrink: 0;
+        border-radius: 10px;
     }
 
     #cabecalho_formulario,
     #cabecalho_bilhete,
     #rodape_formulario,
     #rodape_bilhete {
-        text-align: center;
         background-color: #fff;
         padding: 5px;
         border-bottom: 1px solid lightgrey;
@@ -65,21 +65,49 @@
 
     #cabecalho_formulario,
     #cabecalho_bilhete {
-        height: 10%;
+        height: 8%;
+        background-color: #1A5276;
+        color: #ffffff;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s, color 0.3s;
+        text-shadow: 1px 1px 2px rgba(173, 216, 230, 0.7);
     }
 
     #corpo_formulario,
     #corpo_bilhete {
         border: 1px solid green;
         position: relative;
+    }
+
+    #corpo_formulario {
         height: 80%;
+        margin-top: 0.5%;
+        margin-bottom: 0.5%;
+    }
+
+    #corpo_bilhete {
+        height: 80%;
+        margin-top: 1%;
+        margin-bottom: 1.5%;
     }
 
     #rodape_formulario,
     #rodape_bilhete {
-        border: 1px solid red;
         position: relative;
         height: 10%;
+    }
+
+    #rodape_formulario {
+        background-color: #1A5276;
+        color: #ffffff;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s, color 0.3s;
+        text-shadow: 1px 1px 2px rgba(173, 216, 230, 0.7);
     }
 
     label {
@@ -87,12 +115,16 @@
     }
 
     #div_botao_salvar_bilhete {
+        border-radius: 10px;
+        margin: 0;
+        width: 100%;
         height: 100%;
+        text-shadow: 1px 1px 2px rgba(173, 216, 230, 0.7);
     }
 
     #botao_salvar_bilhete {
         font-weight: bold;
-        font-size: 2vw;
+        font-size: 200%;
     }
 
 </style>
@@ -101,7 +133,6 @@
     <div id="div_formulario">
         <div id="cabecalho_formulario">
             <h1 align="center">Criar Aposta</h1>
-            <hr>
         </div>
 
         <div id="corpo_formulario">
@@ -110,6 +141,27 @@
 
         <div id="rodape_formulario">
             <!-- Seu rodapé do formulário aqui -->
+            <div class="row">
+                <div class="col-2 mx-auto">
+                    <label for="dat_data">Data</label>
+                    <input id="dat_data" class="form-control" name="dat_data" type="date" required/>
+                </div>
+
+                <div class="col-2 mx-auto">
+                    <label for="flo_valor_entrada">Valor da Aposta R$:</label>
+                    <input type="number" class="form-control" id="flo_valor_entrada" step="0.01" name="flo_valor_entrada" value="0.00" required>
+                </div>
+
+                <div class="col-2 mx-auto">
+                    <label for="flo_odd_total">Odd Total:</label>
+                    <input type="number" class="form-control" id="flo_odd_total" step="0.01" name="flo_odd_total" value="0.00" readonly="readonly">
+                </div>
+
+                <div class="col-2 mx-auto">
+                    <label for="flo_valor_potencial">Ganhos Potenciais R$:</label>
+                    <input type="number" class="form-control" id="flo_valor_potencial" step="0.01" name="flo_valor_potencial" value="0.00" readonly="readonly">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -131,3 +183,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function() {
+        // Auto-preenchimento do campo "DATA", ao carregar a página.
+        $('#dat_data').val(new Date().toISOString().slice(0,10));
+    });
+</script>
