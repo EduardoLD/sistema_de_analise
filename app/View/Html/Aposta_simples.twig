@@ -1,0 +1,76 @@
+<style>
+    .select_categoria {
+        min-width: 60%;
+        max-width: 60%;
+    }
+
+    .select_campeonato {
+        min-width: 80%;
+        max-width: 80%;
+    }
+</style>
+
+<div class="row text-center" id="div_formulario_aposta_simples">
+    <div class="col-6" id="div_categoria">
+        <label for="id_categoria" class="form-label col-auto">Categoria</label>
+        <br>
+        <select class="select_categoria" id="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
+            <option value=""></option>
+
+            {% for c in categorias %}
+                <option value="{{ c.id }}">{{ c.str_categoria }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-6" id="div_campeonato">
+        <label for="id_campeonato" class="form-label">Campeonato</label>
+        <br>
+        <select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
+        </select>
+    </div>
+</div>
+
+<script>
+
+    iniciaSelect();
+
+    function iniciaSelect() {
+
+        VirtualSelect.init({ 
+            ele: '#multipleSelect' 
+        });
+        
+        $('#multipleSelect').change(function() {
+            filtra_campeonatos($(this).val(), {{ campeonatos | json_encode | raw }});
+        });
+        /* Remover valor inicial dos campos select*/
+        //var divs = $('div').find('.has-value')
+        //$(divs).removeClass('has-value');
+    }
+
+    function filtra_campeonatos(id_categoria, campeonatos) {
+        console.log(id_categoria);
+        console.log(campeonatos);
+        var select  = '';
+
+        $('.select_campeonato').remove();
+
+        select += '<select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">';
+        select += '<option value=""></option>';
+
+        $.each(campeonatos, function(index, camp) {
+
+            if ( camp['id_categoria'] == id_categoria ) {
+                select += '<option value="' + camp.id + '">' + camp.str_campeonato + '</option>';
+            }
+        });
+
+        select += '</select>';
+
+        $('#div_campeonato').append(select);
+
+        iniciaSelect();
+    }
+
+</script>

@@ -33,7 +33,6 @@
         flex-direction: column;
         position: relative;
         height: 90vh; /* Ajuste aqui para 90% da altura da viewport */
-        background-color: #e0ecf2;
     }
 
     #div_formulario {
@@ -79,14 +78,25 @@
 
     #corpo_formulario,
     #corpo_bilhete {
-        border: 1px solid green;
+        /*border: 1px solid green;*/
         position: relative;
+        background-color: #d9d5d5;
     }
 
     #corpo_formulario {
         height: 80%;
         margin-top: 0.5%;
         margin-bottom: 0.5%;
+        overflow-y: auto;
+        padding-top: 0.3%;
+        padding-left: 2%;
+        padding-right: 0.3%;
+        padding-bottom: 0.3%;
+    }
+
+    #div_tipo_aposta {
+        width: 100%;
+        padding: 5px;
     }
 
     #corpo_bilhete {
@@ -127,7 +137,16 @@
         font-size: 200%;
     }
 
+    #div_formulario_aposta {
+        /*background-color: orange;*/
+        border: 1px solid white;
+        width: 100%;
+        min-height: 92%;
+        border-radius: 10px;
+    }
 </style>
+
+{% include 'estrutura.html' %}
 
 <div id="div_tudo">
     <div id="div_formulario">
@@ -136,11 +155,29 @@
         </div>
 
         <div id="corpo_formulario">
-            <!-- Seu conte˙do do formul·rio aqui -->
+            <div class="row" id="div_tipo_aposta">
+                <div class="col-4 mx-auto">
+                    <div class="row align-items-center">
+                        <label for="str_tipo" class="form-label col-auto">Tipo de Aposta</label>
+                        <div class="col">
+                            <select class="form-select" aria-label="Default select example" name="str_tipo" onchange="cria_opcao_aposta(this.value);" required>
+                                <option value="">Selecione o Tipo de Aposta</option>
+                                <option value="S">Aposta Simples</option>
+                                <option value="M">Aposta M√∫ltipla</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="div_formulario_aposta">
+                {# <div class="col">
+                    <h2 class="text-center">Selecione o Tipo de Aposta</h2>
+                </div> #}
+            </div>
         </div>
 
         <div id="rodape_formulario">
-            <!-- Seu rodapÈ do formul·rio aqui -->
             <div class="row">
                 <div class="col-2 mx-auto">
                     <label for="dat_data">Data</label>
@@ -172,11 +209,9 @@
         </div>
 
         <div id="corpo_bilhete">
-            <!-- Seu conte˙do do bilhete aqui -->
         </div>
 
         <div id="rodape_bilhete">
-            <!-- Seu rodapÈ do bilhete aqui -->
             <div id="div_botao_salvar_bilhete" class="d-grid mx-auto">
                 <button type="submit" id="botao_salvar_bilhete" class="btn btn-success">Salvar Bilhete</button>
             </div>
@@ -186,7 +221,31 @@
 
 <script>
     $(function() {
-        // Auto-preenchimento do campo "DATA", ao carregar a p·gina.
+        // Auto-preenchimento do campo "DATA", ao carregar a p√°gina.
         $('#dat_data').val(new Date().toISOString().slice(0,10));
     });
+
+    function cria_opcao_aposta(tipo) {
+        if ( tipo == 'S' ) {
+            cria_formulario_aposta_simples();
+        } else if ( tipo == 'M' ) {
+            cria_formulario_aposta_multipla();
+        } else {
+            $('#div_formulario_aposta').empty();
+        }
+    }
+
+    function cria_formulario_aposta_simples() {
+        $.ajax({
+            url: '?p=apostas&op=cria_formulario_aposta_simples',
+            dataType: 'html',
+            success: function(formulario_aposta) {
+                $("#div_formulario_aposta").html(formulario_aposta);
+            }
+        });
+    }
+
+    function cria_formulario_aposta_multipla() {
+        console.log('Formul√°rio de aposta m√∫ltipla');
+    }
 </script>

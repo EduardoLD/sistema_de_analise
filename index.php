@@ -15,7 +15,11 @@ ob_start();
 
     $saida = ob_get_contents();
 ob_end_clean();
-
-$tplPronto = str_replace('{{ conteudo }}', $saida, $template);
+// Verifica se a estrutura deve ser incluída antes de processar o template
+if (isset($includeStructure)) {
+    $tplPronto = str_replace('{{ conteudo }}', $saida, $template);
+} else {
+    $tplPronto = $saida; // Se a estrutura não deve ser incluída, apenas use o conteúdo sem modificação
+}
 
 echo $tplPronto;
