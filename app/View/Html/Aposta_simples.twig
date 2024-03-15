@@ -1,10 +1,10 @@
 <style>
-    .select_categoria {
+    #select_categoria {
         min-width: 60%;
         max-width: 60%;
     }
 
-    .select_campeonato {
+    #select_campeonato {
         min-width: 80%;
         max-width: 80%;
     }
@@ -18,12 +18,25 @@
         padding-bottom: 2%;
     }
 
-    #div_time_casa, #div_time_fora {
+    #div_time_casa, #div_time_visitante {
         background-color: orange;
     }
 
     #div_x {
         background-color: green;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #div_x h1 {
+        font-size: 50px;
+    }
+
+    .logo_time {
+        border: 1px solid black;
+        background-color: lightblue;
+        height: 100px;
     }
 </style>
 
@@ -32,7 +45,7 @@
         <div class="col-6" id="div_categoria">
             <label for="id_categoria" class="form-label col-auto">Categoria</label>
             <br>
-            <select class="select_categoria" id="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
+            <select id="select_categoria" class="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
                 <option value=""></option>
 
                 {% for c in categorias %}
@@ -44,7 +57,7 @@
         <div class="col-6" id="div_campeonato">
             <label for="id_campeonato" class="form-label">Campeonato</label>
             <br>
-            <select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
+            <select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
             </select>
         </div>
     </div>
@@ -52,24 +65,24 @@
         <div class="col-4 mx-auto col-time" id="div_time_casa">
             <label for="id_time_casa" class="form-label">Time Casa</label>
             <br>
-            <select class="select_time" id="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true">
+            <select id="select_time_casa" class="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true">
             </select>
         </div>
 
-        <div class="col-1 mx-auto" id="logo_time_casa">
+        <div class="col-1 mx-auto logo_time" id="logo_time_casa">
         </div>
 
         <div class="col-1 mx-auto" id="div_x">
             <h1>X</h1>
         </div>
 
-        <div class="col-1 mx-auto" id="logo_time_visitante">
+        <div class="col-1 mx-auto logo_time" id="logo_time_visitante">
         </div>
 
-        <div class="col-4 mx-auto col-time" id="div_time_fora">
+        <div class="col-4 mx-auto col-time" id="div_time_visitante">
             <label for="id_time_visitante" class="form-label">Time Visitante</label>
             <br>
-            <select class="select_time" id="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true">
+            <select id="select_time_visitante" class="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true">
             </select>
         </div>
     </div>
@@ -86,23 +99,25 @@
     function iniciaSelect() {
 
         VirtualSelect.init({ 
-            ele: '#multipleSelect' 
+            ele: '.multipleSelect' 
         });
         
-        $('#multipleSelect').change(function() {
+        $('#select_categoria').change(function() {
             filtra_campeonatos($(this).val(), {{ campeonatos | json_encode | raw }});
         });
-        /* Remover valor inicial dos campos select*/
-        //var divs = $('div').find('.has-value')
-        //$(divs).removeClass('has-value');
+
+        $('#select_campeonato').change(function() {
+            filtra_times($(this).val(), {{ times | json_encode | raw }})
+        })
     }
 
+    //Função para filtrar campeonatos de acordo com a categoria escolhida.
     function filtra_campeonatos(id_categoria, campeonatos) {
         var select  = '';
 
-        $('.select_campeonato').remove();
+        $('#select_campeonato').remove();
 
-        select += '<select class="select_campeonato" id="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">';
+        select += '<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">';
         select += '<option value=""></option>';
 
         $.each(campeonatos, function(index, camp) {
@@ -115,6 +130,35 @@
         select += '</select>';
 
         $('#div_campeonato').append(select);
+
+        iniciaSelect();
+    }
+
+    //Função para filtrar times de acordo com o campeonato escolhido.
+    async function filtra_times(id_campeonato, times) {
+        var select     = ['', ''];
+        var cpos_times = ['casa', 'visitante'];
+        var desc_times = ['da Casa', 'Visitante'];
+
+        $('#select_time_casa').remove();
+        $('#select_time_visitante').remove();
+
+        await $.each(cpos_times, function(i, opc) {
+            select[i] += '<select id="select_time_' + opc + '" class="multipleSelect" name="id_time_' + opc + '" placeholder="Escolha o Time ' + desc_times[i] + '" data-search="true" data-silent-initial-value-set="true">';
+            select[i] += '<option value=""></option>';
+
+            $.each(times, function(index, time) {
+                var campeonatos_time = time['str_campeonatos'].split(',');
+                
+                if ( campeonatos_time.indexOf(id_campeonato.toString()) !== -1 ) {
+                    select[i] += '<option value="' + time.id + '">' + time.str_time + '</option>';
+                }
+            });
+
+            select[i] += '</select>';
+
+            $('#div_time_' + opc).append(select[i]);
+        });
 
         iniciaSelect();
     }

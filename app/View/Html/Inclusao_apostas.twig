@@ -114,7 +114,6 @@
     #rodape_formulario {
         background-color: #1A5276;
         color: #ffffff;
-        padding: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         transition: background-color 0.3s, color 0.3s;
         text-shadow: 1px 1px 2px rgba(173, 216, 230, 0.7);
@@ -143,6 +142,11 @@
         width: 100%;
         min-height: 92%;
         border-radius: 10px;
+    }
+
+    #row_rodape_formulario {
+        position: relative;
+        bottom: 5%;
     }
 </style>
 
@@ -178,7 +182,7 @@
         </div>
 
         <div id="rodape_formulario">
-            <div class="row">
+            <div class="row" id="row_rodape_formulario">
                 <div class="col-2 mx-auto">
                     <label for="dat_data">Data</label>
                     <input id="dat_data" class="form-control" name="dat_data" type="date" required/>
@@ -248,4 +252,5 @@
     function cria_formulario_aposta_multipla() {
         console.log('Formulário de aposta múltipla');
     }
+    
 </script>
