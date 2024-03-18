@@ -8,7 +8,20 @@
     #select_campeonato {
         min-width: 100%;
         max-width: 100%;
-        margin-left: 24%;
+        margin-left: -5%;
+    }
+
+    #div_logo_campeonato {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #div_logo_campeonato img {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
     }
 
     #row_times {
@@ -58,7 +71,9 @@
             </select>
         </div>
 
-        <div class="col-3"></div>
+        <div class="col-1 mx-auto"></div>
+        <div class="col-1 mx-auto" id="div_logo_campeonato"></div>
+        <div class="col-1 mx-auto"></div>
 
         <div class="col-4" id="div_campeonato">
             <label for="id_campeonato" class="form-label">Campeonato</label>
@@ -98,13 +113,22 @@
 
     iniciaSelect();
 
-    function iniciaSelect() {
+    function iniciaSelect(id_multiple_select=false) {
 
-        VirtualSelect.init({ 
-            ele: '.multipleSelect' 
-        });
+        if ( id_multiple_select == false ) {
+            VirtualSelect.init({ 
+                ele: '.multipleSelect' 
+            });
+        } else {
+            VirtualSelect.init({ 
+                ele: '#' + id_multiple_select
+            });
+        }
         
         $('#select_categoria').change(function() {
+            // Remove a logo do campeonato inicialmente.
+            $('#div_logo_campeonato').find('img').remove();
+
             // Filtra os campeonatos da categoria selecionada.
             filtra_campeonatos($(this).val(), {{ campeonatos | json_encode | raw }});
 
@@ -113,11 +137,24 @@
         });
 
         $('#select_campeonato').change(function() {
+            // Remove a logo do campeonato inicialmente.
+            $('#div_logo_campeonato').find('img').remove();
+
+            /*
+            * Verificar essa função, está triplicando o value do select_campeonato, a cada vez que muda.
+            */
             // Filtra os times do campeonato selecionado.
             filtra_times($(this).val(), {{ times | json_encode | raw }});
 
-            // Esconde a div que contém os campos para seleçãod e times, até que seja selecionado um campeonato novamente.
+            // Mostra a logo do campeonato.
+            mostra_logo_campeonato($(this).val(), {{ campeonatos | json_encode | raw }});
+
+            // Mostra a div que contém os campos para seleção de times, até que seja selecionado um campeonato novamente.
             $('#row_times').removeAttr('hidden');
+
+            if ( $('#select_campeonato').val() == '' ) {
+                $('#row_times').attr('hidden');
+            }
         });
 
         $('#select_time_casa').change(function() {
@@ -139,42 +176,41 @@
 
     //Função para filtrar campeonatos de acordo com a categoria escolhida.
     function filtra_campeonatos(id_categoria, campeonatos) {
-        var select  = '';
+        let select = $('#select_campeonato');
 
-        $('#select_campeonato').remove();
+        if (select.length) {
+            select.remove();
+        }
 
-        select += '<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">';
-        select += '<option value=""></option>';
+        select = $('<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">');
+        select.append('<option value=""></option>');
 
         $.each(campeonatos, function(index, camp) {
-
-            if ( camp['id_categoria'] == id_categoria ) {
-                select += '<option value="' + camp.id + '">' + camp.str_campeonato + '</option>';
+            if (camp['id_categoria'] == id_categoria) {
+                select.append('<option value="' + camp.id + '">' + camp.str_campeonato + '</option>');
             }
         });
 
-        select += '</select>';
-
         $('#div_campeonato').append(select);
 
-        iniciaSelect();
+        iniciaSelect('select_campeonato');
     }
 
     //Função para filtrar times de acordo com o campeonato escolhido.
-    async function filtra_times(id_campeonato, times) {
-        var select     = ['', ''];
-        var cpos_times = ['casa', 'visitante'];
-        var desc_times = ['da Casa', 'Visitante'];
+    function filtra_times(id_campeonato, times) {
+        let select     = ['', ''];
+        let cpos_times = ['casa', 'visitante'];
+        let desc_times = ['da Casa', 'Visitante'];
 
         $('#select_time_casa').remove();
         $('#select_time_visitante').remove();
 
-        await $.each(cpos_times, function(i, opc) {
+        $.each(cpos_times, function(i, opc) {
             select[i] += '<select id="select_time_' + opc + '" class="multipleSelect" name="id_time_' + opc + '" placeholder="Escolha o Time ' + desc_times[i] + '" data-search="true" data-silent-initial-value-set="true">';
             select[i] += '<option value=""></option>';
 
             $.each(times, function(index, time) {
-                var campeonatos_time = time['str_campeonatos'].split(',');
+                let campeonatos_time = time['str_campeonatos'].split(',');
                 
                 if ( campeonatos_time.indexOf(id_campeonato.toString()) !== -1 ) {
                     select[i] += '<option value="' + time.id + '">' + time.str_time + '</option>';
@@ -184,20 +220,35 @@
             select[i] += '</select>';
 
             $('#div_time_' + opc).append(select[i]);
-        });
 
-        iniciaSelect();
+            iniciaSelect('select_time_' + opc);
+        });
     }
 
     // Função para mostrar a logo do time selecionado.
     function mostra_logo_time(opc, id_time, times) {
         if ( id_time > 0 ) {
-            var time_selecionado = times.filter(function(time) {
+            let time_selecionado = times.filter(function(time) {
                 return time.id == id_time;
             });
 
-            var div = $('#logo_time_' + opc);
-            var img = '<img src="' + time_selecionado[0]['str_logo'] + '">';
+            let div = $('#logo_time_' + opc);
+            let img = '<img src="' + time_selecionado[0]['str_logo'] + '">';
+            
+            $(div).append(img);
+        }
+    }
+
+    // Função para mostrar a logo do campeonato selecionado.
+    function mostra_logo_campeonato(id_campeonato, campeonatos) {
+        if ( id_campeonato > 0 ) {
+            //div_logo_campeonato
+            let camp_selecionado = campeonatos.filter(function(camp) {
+                return camp.id == id_campeonato;
+            });
+
+            let div = $('#div_logo_campeonato');
+            let img = '<img src="' + camp_selecionado[0]['str_logo'] + '">';
             
             $(div).append(img);
         }
