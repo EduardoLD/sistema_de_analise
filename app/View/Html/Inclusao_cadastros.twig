@@ -191,13 +191,13 @@
             const leitor = new FileReader();
 
             leitor.onload = function (e) {
-            // Cria um elemento de imagem e define o atributo src para a imagem carregada
-            const imagem = document.createElement('img');
-            imagem.src = e.target.result;
+                // Cria um elemento de imagem e define o atributo src para a imagem carregada
+                const imagem = document.createElement('img');
+                imagem.src = e.target.result;
 
-            // Limpa o conteúdo anterior do contâiner de imagem e adiciona a nova imagem
-            imagemContainer.innerHTML = '';
-            imagemContainer.appendChild(imagem);
+                // Limpa o conteúdo anterior do contâiner de imagem e adiciona a nova imagem
+                imagemContainer.innerHTML = '';
+                imagemContainer.appendChild(imagem);
             };
 
             // Lê o conteúdo do arquivo como uma URL de dados

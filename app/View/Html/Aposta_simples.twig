@@ -1,16 +1,14 @@
 <style>
     #select_categoria {
-        min-width: 60%;
-        max-width: 60%;
+        min-width: 100%;
+        max-width: 100%;
+        margin-left: 2.5%;
     }
 
     #select_campeonato {
-        min-width: 80%;
-        max-width: 80%;
-    }
-
-    #div_categoria, #div_campeonato {
-        /*border: 1px solid red;*/
+        min-width: 100%;
+        max-width: 100%;
+        margin-left: 24%;
     }
 
     #row_times {
@@ -18,12 +16,12 @@
         padding-bottom: 2%;
     }
 
-    #div_time_casa, #div_time_visitante {
-        background-color: orange;
+    #row_times .multipleSelect {
+        width: 100%;
+        min-width: 100%;
     }
 
     #div_x {
-        background-color: green;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -34,15 +32,21 @@
     }
 
     .logo_time {
-        border: 1px solid black;
-        background-color: lightblue;
         height: 100px;
+        padding: 0;
+    }
+
+    .logo_time img {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
     }
 </style>
 
 <div id="div_formulario_aposta_simples">
     <div class="row text-center align-items-stretch">
-        <div class="col-6" id="div_categoria">
+        <div class="col-4" id="div_categoria">
             <label for="id_categoria" class="form-label col-auto">Categoria</label>
             <br>
             <select id="select_categoria" class="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
@@ -54,14 +58,16 @@
             </select>
         </div>
 
-        <div class="col-6" id="div_campeonato">
+        <div class="col-3"></div>
+
+        <div class="col-4" id="div_campeonato">
             <label for="id_campeonato" class="form-label">Campeonato</label>
             <br>
             <select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
             </select>
         </div>
     </div>
-    <div class="row text-center align-items-stretch" id="row_times">
+    <div class="row text-center align-items-stretch" id="row_times" hidden>
         <div class="col-4 mx-auto col-time" id="div_time_casa">
             <label for="id_time_casa" class="form-label">Time Casa</label>
             <br>
@@ -88,10 +94,6 @@
     </div>
 </div>
 
-{# <div class="row text-center">
-    
-</div> #}
-
 <script>
 
     iniciaSelect();
@@ -103,12 +105,36 @@
         });
         
         $('#select_categoria').change(function() {
+            // Filtra os campeonatos da categoria selecionada.
             filtra_campeonatos($(this).val(), {{ campeonatos | json_encode | raw }});
+
+            // Esconde a div que contém os campos para seleçãod e times, até que seja selecionado um campeonato novamente.
+            $('#row_times').attr('hidden', 'true');
         });
 
         $('#select_campeonato').change(function() {
-            filtra_times($(this).val(), {{ times | json_encode | raw }})
-        })
+            // Filtra os times do campeonato selecionado.
+            filtra_times($(this).val(), {{ times | json_encode | raw }});
+
+            // Esconde a div que contém os campos para seleçãod e times, até que seja selecionado um campeonato novamente.
+            $('#row_times').removeAttr('hidden');
+        });
+
+        $('#select_time_casa').change(function() {
+            // Remove a logo do time inicialmente.
+            $('#logo_time_casa').find('img').remove();
+
+            // Mostra a logo do time selecionado.
+            mostra_logo_time('casa', $(this).val(), {{ times | json_encode | raw }});
+        });
+
+        $('#select_time_visitante').change(function() {
+            // Remove a logo do time inicialmente.
+            $('#logo_time_visitante').find('img').remove();
+
+            // Mostra a logo do time selecionado.
+            mostra_logo_time('visitante', $(this).val(), {{ times | json_encode | raw }});
+        });
     }
 
     //Função para filtrar campeonatos de acordo com a categoria escolhida.
@@ -161,6 +187,20 @@
         });
 
         iniciaSelect();
+    }
+
+    // Função para mostrar a logo do time selecionado.
+    function mostra_logo_time(opc, id_time, times) {
+        if ( id_time > 0 ) {
+            var time_selecionado = times.filter(function(time) {
+                return time.id == id_time;
+            });
+
+            var div = $('#logo_time_' + opc);
+            var img = '<img src="' + time_selecionado[0]['str_logo'] + '">';
+            
+            $(div).append(img);
+        }
     }
 
 </script>
