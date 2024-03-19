@@ -13,25 +13,39 @@ Class CadastroController
 
     public function index()
     {
-        $p = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
+        $p            = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
+        $filtra_camp  = in_array($p, ['times', 'confrontos']);
+        $itens        = [
+            'confrontos'  => $this->model->query_lista_confrontos(),
+            'times'       => "SELECT a.*, c.str_categoria FROM $p a INNER JOIN categorias c ON c.id = a.id_categoria ORDER BY a.id",
+            'campeonatos' => "SELECT a.*, c.str_categoria FROM $p a INNER JOIN categorias c ON c.id = a.id_categoria ORDER BY a.id",
+            'mercados'    => "SELECT a.*, c.str_categoria FROM $p a INNER JOIN categorias c ON c.id = a.id_categoria ORDER BY a.id",
+            'categorias'  => "SELECT * FROM $p ORDER BY id"
+        ];
+
+        // ver($this->model->execQuery($itens[$p]));
 
         carrega_twig('Lista_cadastros.twig', [
             'p'           => $p,
             'cabecalho'   => $this->model->execQuery("SELECT COLUMN_NAME fields FROM information_schema.columns WHERE table_schema = 'db_analise' AND table_name = '$p'"),
-            'itens'       => $p != 'categorias' ? $this->model->execQuery("SELECT a.*, c.str_categoria FROM $p a INNER JOIN categorias c ON c.id = a.id_categoria ORDER BY a.id") : $this->model->execQuery("SELECT * FROM $p ORDER BY id"),
-            'campeonatos' => $p == 'times' ? $this->model->execQuery("SELECT * FROM campeonatos ORDER BY str_campeonato") : ''
+            'itens'       => $this->model->execQuery($itens[$p]),
+            'campeonatos' => $filtra_camp ? $this->model->execQuery("SELECT * FROM campeonatos ORDER BY str_campeonato") : ''
         ]);
     }
 
     public function inclusao()
     {
-        $p = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
+        $p            = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_SPECIAL_CHARS);
+        $filtra_camp  = in_array($p, ['times', 'confrontos']);
+        $filtra_categ = $p != 'categorias';
+        $filtra_times = $p == 'confrontos';
 
         carrega_twig('Inclusao_cadastros.twig', [
             'p'           => $p,
             'cabec'       => $this->model->execQuery("SELECT COLUMN_NAME fields FROM information_schema.columns WHERE table_schema = 'db_analise' AND table_name = '$p'"),
-            'campeonatos' => $p == 'times' ? $this->model->execQuery("SELECT * FROM campeonatos ORDER BY str_campeonato") : '',
-            'categorias'  => $p != 'categorias' ? $this->model->execQuery("SELECT c.id, c.str_categoria FROM categorias c ORDER BY c.id") : ''
+            'campeonatos' => $filtra_camp ? $this->model->execQuery("SELECT * FROM campeonatos ORDER BY str_campeonato") : '',
+            'categorias'  => $filtra_categ ? $this->model->execQuery("SELECT c.id, c.str_categoria FROM categorias c ORDER BY c.id") : '',
+            'times'       => $filtra_times ? $this->model->execQuery("SELECT * FROM times ORDER BY str_time") : ''
         ]);
     }
 

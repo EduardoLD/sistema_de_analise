@@ -89,7 +89,8 @@
         background-color: #ffffff;
         border: 2px solid #B9B9B9;
         border-radius: 15px;
-        width: 50%;
+        width: fit-content;
+        min-width: 50%;
         position: relative;
         margin: auto;
         margin-top: 40px;
@@ -134,31 +135,54 @@
             <tbody>
                 {% for i in itens %}
                     <tr class="linha_tabela">
-                        {% for c in cabecalho %}
+                        {% if p == 'confrontos' %}
 
-                            {% if c['fields'] == 'str_logo' %}
-                                <td><img src="{{ i[c['fields']] }}" width="40px;"></td>
-                            {% elseif c['fields'] == 'id_categoria' %}
-                                <td>{{ i['str_categoria'] }}</td>
-                            {% else %}
+                            <td>{{ i['id'] }}</td>
+                            <td style="text-align: center;">{{ i['str_categoria'] }}</td>
+                            <td>
+                                <img src="{{ i['logo_camp'] }}" width="40px;"/>
+                                {{ i['str_campeonato'] }}
+                            </td>
+                            <td>
+                                <img src="{{ i['logo_time_casa'] }}" width="40px;"/>
+                                {{ i['time_casa'] }}
+                            </td>
+                            <td>
+                                <img src="{{ i['logo_time_visitante'] }}" width="40px;"/>
+                                {{ i['time_visitante'] }}
+                            </td>
+                            <td>{{ i['dat_data']|date('d/m/Y') }}</td>
+                            <td>{{ i['str_hora'] }}</td>
 
-                                {% if p == 'times' and c['fields'] == 'str_campeonatos' %}
-                                    <td>
-                                        {% for id_camp in i[c['fields']]|split(',') %}
-                                            {% for camp in campeonatos %}
-                                                {% if camp.id == id_camp %}
-                                                    <img src="{{ camp['str_logo'] }}" width="40px">
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endfor %}
-                                    </td>
+                        {% else %}
+
+                            {% for c in cabecalho %}
+
+                                {% if c['fields'] == 'str_logo' %}
+                                    <td><img src="{{ i[c['fields']] }}" width="40px;"></td>
+                                {% elseif c['fields'] == 'id_categoria' %}
+                                    <td>{{ i['str_categoria'] }}</td>
                                 {% else %}
-                                    <td>{{ i[c['fields']] }}</td>
+
+                                    {% if p == 'times' and c['fields'] == 'str_campeonatos' %}
+                                        <td>
+                                            {% for id_camp in i[c['fields']]|split(',') %}
+                                                {% for camp in campeonatos %}
+                                                    {% if camp.id == id_camp %}
+                                                        <img src="{{ camp['str_logo'] }}" width="40px">
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </td>
+                                    {% else %}
+                                        <td>{{ i[c['fields']] }}</td>
+                                    {% endif %}
+
                                 {% endif %}
 
-                            {% endif %}
+                            {% endfor %}
 
-                        {% endfor %}
+                        {% endif %}
                         
                         <td>
                             <i class="fa-solid fa-eye" id="icone_visualizar" onclick="window.location='?p={{ p }}&op=visualizacao&id={{ i['id'] }}'"></i>

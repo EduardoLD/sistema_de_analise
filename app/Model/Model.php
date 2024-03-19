@@ -66,4 +66,23 @@ Class Model
             $this->execQuery($sql, false);
         }
     }
+
+    public function query_lista_confrontos()
+    {
+        return "SELECT con.*, cat.str_categoria, camp.str_campeonato, camp.str_logo logo_camp, t_casa.str_time time_casa, t_casa.str_logo logo_time_casa,
+                t_visitante.str_time time_visitante, t_visitante.str_logo logo_time_visitante
+                FROM confrontos con
+                    INNER JOIN categorias cat
+                    ON cat.id = con.id_categoria
+                    
+                    INNER JOIN campeonatos camp
+                    ON camp.id = con.id_campeonato
+                    
+                    INNER JOIN times t_casa
+                    ON t_casa.id = con.id_time_casa
+                    
+                    INNER JOIN times t_visitante
+                    ON t_visitante.id = con.id_time_visitante
+                ORDER BY dat_data DESC";
+    }
 }
