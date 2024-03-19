@@ -203,7 +203,7 @@
                     <div class="col-5" id="div_categoria">
                         <label for="id_categoria" class="form-label col-auto">Categoria</label>
                         <br>
-                        <select id="select_categoria" class="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true">
+                        <select id="select_categoria" class="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true" required>
                             <option value=""></option>
 
                             {% for c in categorias %}
@@ -216,7 +216,7 @@
                     <div class="col-5" id="div_campeonato">
                         <label for="id_campeonato" class="form-label">Campeonato</label>
                         <br>
-                        <select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">
+                        <select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true" required>
                         </select>
                     </div>
                 </div>
@@ -225,7 +225,7 @@
                     <div class="col-4 mx-auto col-time" id="div_time_casa">
                         <label for="id_time_casa" class="form-label">Time Casa</label>
                         <br>
-                        <select id="select_time_casa" class="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true">
+                        <select id="select_time_casa" class="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true" required>
                         </select>
                     </div>
 
@@ -242,7 +242,7 @@
                     <div class="col-4 mx-auto col-time" id="div_time_visitante">
                         <label for="id_time_visitante" class="form-label">Time Visitante</label>
                         <br>
-                        <select id="select_time_visitante" class="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true">
+                        <select id="select_time_visitante" class="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true" required>
                         </select>
                     </div>
                 </div>
@@ -250,12 +250,12 @@
                 <div class="row text-center align-items-stretch">
                     <div class="col-4 mx-auto">
                         <label for="startDate">Data</label>
-                        <input id="startDate" class="form-control" type="date" name="dat_data"/>
+                        <input id="startDate" class="form-control" type="date" name="dat_data" required/>
                     </div>
 
                     <div class="col-4 mx-auto cs-form">
                         <label>Hora</label>
-                        <input type="time" class="form-control" name="str_hora" />
+                        <input type="time" class="form-control" name="str_hora" required/>
                     </div>
                 </div>
 
@@ -383,7 +383,7 @@
             select.remove();
         }
 
-        select = $('<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true">');
+        select = $('<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true" required>');
         select.append('<option value=""></option>');
 
         $.each(campeonatos, function(index, camp) {
@@ -407,7 +407,7 @@
         $('#select_time_visitante').remove();
 
         $.each(cpos_times, function(i, opc) {
-            select[i] += '<select id="select_time_' + opc + '" class="multipleSelect" name="id_time_' + opc + '" placeholder="Escolha o Time ' + desc_times[i] + '" data-search="true" data-silent-initial-value-set="true">';
+            select[i] += '<select id="select_time_' + opc + '" class="multipleSelect" name="id_time_' + opc + '" placeholder="Escolha o Time ' + desc_times[i] + '" data-search="true" data-silent-initial-value-set="true" required>';
             select[i] += '<option value=""></option>';
 
             $.each(times, function(index, time) {
