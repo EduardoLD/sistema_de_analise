@@ -255,73 +255,6 @@
                 <br>
                 <div id="divImgLogo"></div>
             
-            {% elseif p == 'confrontos' %}
-
-                <div class="row text-center align-items-stretch">
-                    <div class="col-5" id="div_categoria">
-                        <label for="id_categoria" class="form-label col-auto">Categoria</label>
-                        <br>
-                        <select id="select_categoria" class="multipleSelect" name="id_categoria" placeholder="Escolha a Categoria" data-search="true" data-silent-initial-value-set="true" required>
-                            <option value=""></option>
-
-                            {% for c in categorias %}
-                                {% if c.id == dados.id_categoria %}
-                                    <option value="{{ c.id }}" selected>{{ c.str_categoria }}</option>
-                                {% else %}
-                                    <option value="{{ c.id }}">{{ c.str_categoria }}</option>
-                                {% endif %}
-                            {% endfor %}
-
-                        </select>
-                    </div>
-                    <div class="col-1 mx-auto" id="div_logo_campeonato"></div>
-
-                    <div class="col-5" id="div_campeonato">
-                        <label for="id_campeonato" class="form-label">Campeonato</label>
-                        <br>
-                        <select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true" required>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row text-center align-items-stretch" id="row_times">
-                    <div class="col-4 mx-auto col-time" id="div_time_casa">
-                        <label for="id_time_casa" class="form-label">Time Casa</label>
-                        <br>
-                        <select id="select_time_casa" class="multipleSelect" name="id_time_casa" placeholder="Escolha o time da casa" data-search="true" data-silent-initial-value-set="true" required>
-                        </select>
-                    </div>
-
-                    <div class="col-1 mx-auto logo_time" id="logo_time_casa">
-                    </div>
-
-                    <div class="col-1 mx-auto" id="div_x">
-                        <h1>X</h1>
-                    </div>
-
-                    <div class="col-1 mx-auto logo_time" id="logo_time_visitante">
-                    </div>
-
-                    <div class="col-4 mx-auto col-time" id="div_time_visitante">
-                        <label for="id_time_visitante" class="form-label">Time Visitante</label>
-                        <br>
-                        <select id="select_time_visitante" class="multipleSelect" name="id_time_visitante" placeholder="Escolha o time visitante" data-search="true" data-silent-initial-value-set="true" required>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row text-center align-items-stretch">
-                    <div class="col-4 mx-auto">
-                        <label for="startDate">Data</label>
-                        <input id="startDate" class="form-control" type="date" name="dat_data" value="{{ dados.dat_data }}" required/>
-                    </div>
-
-                    <div class="col-4 mx-auto cs-form">
-                        <label>Hora</label>
-                        <input type="time" class="form-control" name="str_hora" value="{{ dados.str_hora }}" required/>
-                    </div>
-                </div>
-
             {% endif %}
 
             <br>
@@ -343,84 +276,11 @@
         VirtualSelect.init({ 
             ele: '.multipleSelect' 
         });
-        
-        if ( getURLPar('p') == 'confrontos' ) {
-            tratativas_confronto(aux);
-        }
-    }
-
-    function tratativas_confronto(aux) {
-        iniciais_confronto(aux);
-
-        $('#select_categoria').change(function() {
-            // Remove a logo do campeonato inicialmente.
-            $('#div_logo_campeonato').find('img').remove();
-
-            // Filtra os campeonatos da categoria selecionada.
-            filtra_campeonatos($(this).val(), {{ campeonatos | json_encode | raw }});
-
-            // Esconde a div que contém os campos para seleçãod e times, até que seja selecionado um campeonato novamente.
-            $('#row_times').attr('hidden', 'true');
-        });
-
-        $('#select_campeonato').change(function() {
-            // Remove a logo do campeonato inicialmente.
-            $('#div_logo_campeonato').find('img').remove();
-
-            // Filtra os times do campeonato selecionado.
-            filtra_times($(this).val(), {{ times | json_encode | raw }});
-
-            // Mostra a logo do campeonato.
-            mostra_logo_campeonato($(this).val(), {{ campeonatos | json_encode | raw }});
-
-            // Mostra a div que contém os campos para seleção de times, até que seja selecionado um campeonato novamente.
-            $('#row_times').removeAttr('hidden');
-
-            if ( $('#select_campeonato').val() == '' ) {
-                $('#row_times').attr('hidden');
-            }
-        });
-
-        $('#select_time_casa').change(function() {
-            // Remove a logo do time inicialmente.
-            $('#logo_time_casa').find('img').remove();
-
-            // Mostra a logo do time selecionado.
-            mostra_logo_time('casa', $(this).val(), {{ times | json_encode | raw }});
-        });
-
-        $('#select_time_visitante').change(function() {
-            // Remove a logo do time inicialmente.
-            $('#logo_time_visitante').find('img').remove();
-
-            // Mostra a logo do time selecionado.
-            mostra_logo_time('visitante', $(this).val(), {{ times | json_encode | raw }});
-        });
-    }
-
-    function iniciais_confronto(aux) {
-        if ( aux ) {
-            $('#div_logo_campeonato').find('img').remove();
-
-            filtra_times($('#select_campeonato').val(), {{ times | json_encode | raw }});
-
-            // Mostra a logo do campeonato.
-            mostra_logo_campeonato($('#select_campeonato').val(), {{ campeonatos | json_encode | raw }});
-
-            // Mostra a div que contém os campos para seleção de times, até que seja selecionado um campeonato novamente.
-            $('#row_times').removeAttr('hidden');
-
-            if ( $('#select_campeonato').val() == '' ) {
-                $('#row_times').attr('hidden');
-            }
-        }
     }
 
     function inicia_funcao_alteracao() {
         if ( getURLPar('p') == 'times' && getURLPar('op') == 'alteracao' ) {
             filtra_campeonatos_alteracao_multiple();
-        } else if ( getURLPar('p') == 'confrontos' && getURLPar('op') == 'alteracao' ) {
-            filtra_campeonatos_alteracao();
         }
     }
 
@@ -457,12 +317,9 @@
         var select  = '';
         campeonatos = JSON.parse(campeonatos);
 
-        // MODELO 2
-        //$('#multipleSelect').next().remove();
-
         $('#multipleSelect').remove();
 
-        select += '<select id="multipleSelect" multiple name="str_campeonatos" placeholder="Campeonatos" data-search="true" data-silent-initial-value-set="true">';
+        select += '<select id="multipleSelect" id="str_campeonatos" multiple name="str_campeonatos" placeholder="Campeonatos" data-search="true" data-silent-initial-value-set="true">';
 
         $.each(campeonatos, function(index, camp) {
             if ( camp['id_categoria'] == id_categoria ) {
@@ -483,37 +340,9 @@
             ); 
     }
 
-    function filtra_campeonatos_alteracao() {
-        var select       = '';
-        var id_categoria = {{ dados.id_categoria }};
-        var id_camp      = {{ dados.id_campeonato }};
-        var campeonatos  = {{ campeonatos|json_encode|raw }};
-
-        $('#select_campeonato').remove();
-
-        select += '<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true" required>';
-
-        $.each(campeonatos, function(index, campeonato) {
-            if ( campeonato['id_categoria'] == id_categoria ) {
-
-                if ( campeonato['id'] == id_camp ) {
-                    select += '<option value="' + campeonato.id + '" selected>' + campeonato.str_campeonato + '</option>';
-                } else {
-                    select += '<option value="' + campeonato.id + '">' + campeonato.str_campeonato + '</option>';
-                }
-            }
-        });
-
-        select += '</select>';
-        
-        $('#div_campeonato').append(select);
-
-        iniciaSelect(1);
-    }
-
     function filtra_campeonatos_alteracao_multiple() {
         var select          = '';
-        var id_categoria    = {{ dados.id_categoria }};
+        var id_categoria    = {{ dados.id_categoria ? dados.id_categoria : 0 }};
         var str_campeonatos = {{ dados.str_campeonatos|json_encode|raw }};
         var campeonatos     = {{ campeonatos|json_encode|raw }};
         str_campeonatos     = str_campeonatos.split(',');
@@ -540,83 +369,4 @@
         iniciaSelect();
     }
 
-    //Função para filtrar campeonatos de acordo com a categoria escolhida.
-    function filtra_campeonatos(id_categoria, campeonatos) {
-        let select = $('#select_campeonato');
-
-        if (select.length) {
-            select.remove();
-        }
-
-        select = $('<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true" required>');
-        select.append('<option value=""></option>');
-
-        $.each(campeonatos, function(index, camp) {
-            if (camp['id_categoria'] == id_categoria) {
-                select.append('<option value="' + camp.id + '">' + camp.str_campeonato + '</option>');
-            }
-        });
-
-        $('#div_campeonato').append(select);
-
-        iniciaSelect();
-    }
-
-    //Função para filtrar times de acordo com o campeonato escolhido.
-    function filtra_times(id_campeonato, times) {
-        let select     = ['', ''];
-        let cpos_times = ['casa', 'visitante'];
-        let desc_times = ['da Casa', 'Visitante'];
-
-        $('#select_time_casa').remove();
-        $('#select_time_visitante').remove();
-
-        $.each(cpos_times, function(i, opc) {
-            select[i] += '<select id="select_time_' + opc + '" class="multipleSelect" name="id_time_' + opc + '" placeholder="Escolha o Time ' + desc_times[i] + '" data-search="true" data-silent-initial-value-set="true" required>';
-            select[i] += '<option value=""></option>';
-
-            $.each(times, function(index, time) {
-                let campeonatos_time = time['str_campeonatos'].split(',');
-                
-                if ( campeonatos_time.indexOf(id_campeonato.toString()) !== -1 ) {
-                    select[i] += '<option value="' + time.id + '">' + time.str_time + '</option>';
-                }
-            });
-
-            select[i] += '</select>';
-
-            $('#div_time_' + opc).append(select[i]);
-
-            iniciaSelect();
-        });
-    }
-
-    // Função para mostrar a logo do campeonato selecionado.
-    function mostra_logo_campeonato(id_campeonato, campeonatos) {
-        if ( id_campeonato > 0 ) {
-            //div_logo_campeonato
-            let camp_selecionado = campeonatos.filter(function(camp) {
-                return camp.id == id_campeonato;
-            });
-
-            let div = $('#div_logo_campeonato');
-            let img = '<img src="' + camp_selecionado[0]['str_logo'] + '">';
-            
-            $(div).append(img);
-        }
-    }
-
-    // Função para mostrar a logo do time selecionado.
-    function mostra_logo_time(opc, id_time, times) {
-        if ( id_time > 0 ) {
-            let time_selecionado = times.filter(function(time) {
-                return time.id == id_time;
-            });
-
-            let div = $('#logo_time_' + opc);
-            let img = '<img src="' + time_selecionado[0]['str_logo'] + '">';
-            
-            $(div).append(img);
-        }
-    }
 </script>
