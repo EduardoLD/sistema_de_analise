@@ -156,21 +156,10 @@
         mostra_logo_campeonato($('#select_campeonato').val(), {{ campeonatos | json_encode | raw }});
         filtra_times($('#select_campeonato').val(), {{ times | json_encode | raw }});
 
-        $('#select_categoria').change(function() {
-            tratativas_onchange_cpo_categoria($(this).val());
-        });
+        mostra_logo_time('casa', $('#select_time_casa').val(), {{ times | json_encode | raw }});
+        mostra_logo_time('visitante', $('#select_time_visitante').val(), {{ times | json_encode | raw }});
 
-        $('#select_campeonato').change(function() {
-            tratativas_onchange_cpo_campeonato($(this).val());
-        });
-
-        $('#select_time_casa').change(function() {
-            tratativas_onchange_cpo_time_casa($(this).val());
-        });
-
-        $('#select_time_visitante').change(function() {
-            tratativas_onchange_cpo_time_visitante($(this).val());
-        });
+        adiciona_onchange_functions_selects();
     })
 
     function inicia_todos_selects() {
@@ -194,7 +183,7 @@
 
         $('#select_campeonato').remove();
 
-        select += '<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true" onchange="tratativas_onchange_cpo_campeonato($(this).val());" required>';
+        select += '<select id="select_campeonato" class="multipleSelect" name="id_campeonato" placeholder="Escolha o Campeonato" data-search="true" data-silent-initial-value-set="true" required>';
 
         $.each(campeonatos, function(index, campeonato) {
             if ( campeonato['id_categoria'] == id_categoria ) {
@@ -243,7 +232,7 @@
         $('#select_time_visitante').remove();
 
         $.each(cpos_times, function(i, opc) {
-            select[i] += '<select id="select_time_' + opc + '" class="multipleSelect" name="id_time_' + opc + '" placeholder="Escolha o Time ' + desc_times[i] + '" data-search="true" data-silent-initial-value-set="true" tratativas_onchange_cpo_time_'+opc+'($(this).val()); required>';
+            select[i] += '<select id="select_time_' + opc + '" class="multipleSelect" name="id_time_' + opc + '" placeholder="Escolha o Time ' + desc_times[i] + '" data-search="true" data-silent-initial-value-set="true" required>';
             select[i] += '<option value=""></option>';
 
             $.each(times, function(index, time) {
@@ -274,8 +263,10 @@
         // Filtra os campeonatos da categoria selecionada.
         filtra_campeonatos_change_categoria(id_categoria, {{ campeonatos | json_encode | raw }});
 
+        adiciona_onchange_functions_selects();
+
         // Esconde a div que contém os campos para seleçãod e times, até que seja selecionado um campeonato novamente.
-        $('#row_times').attr('hidden', 'true');
+        $('#row_times').attr('hidden', true);
     }
 
     function tratativas_onchange_cpo_campeonato(id_campeonato) {
@@ -288,11 +279,13 @@
         // Mostra a logo do campeonato.
         mostra_logo_campeonato(id_campeonato, {{ campeonatos | json_encode | raw }});
 
+        adiciona_onchange_functions_selects();
+
         // Mostra a div que contém os campos para seleção de times, até que seja selecionado um campeonato novamente.
         $('#row_times').removeAttr('hidden');
 
         if ( $('#select_campeonato').val() == '' ) {
-            $('#row_times').attr('hidden');
+            $('#row_times').attr('hidden', true);
         }
     }
 
@@ -338,5 +331,37 @@
         return decodeURI(         
             (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]     
             ); 
+    }
+
+    // Função para mostrar a logo do time selecionado.
+    function mostra_logo_time(opc, id_time, times) {
+        if ( id_time > 0 ) {
+            let time_selecionado = times.filter(function(time) {
+                return time.id == id_time;
+            });
+
+            let div = $('#logo_time_' + opc);
+            let img = '<img src="' + time_selecionado[0]['str_logo'] + '">';
+            
+            $(div).append(img);
+        }
+    }
+
+    function adiciona_onchange_functions_selects() {
+        $('#select_categoria').change(function() {
+            tratativas_onchange_cpo_categoria($(this).val());
+        });
+
+        $('#select_campeonato').change(function() {
+            tratativas_onchange_cpo_campeonato($(this).val());
+        });
+
+        $('#select_time_casa').change(function() {
+            tratativas_onchange_cpo_time_casa($(this).val());
+        });
+
+        $('#select_time_visitante').change(function() {
+            tratativas_onchange_cpo_time_visitante($(this).val());
+        });
     }
 </script>
