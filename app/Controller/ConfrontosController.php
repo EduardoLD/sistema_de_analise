@@ -19,4 +19,16 @@ Class ConfrontosController extends CadastroController
             'times'       => $this->model->execQuery("SELECT * FROM times ORDER BY str_time")
         ]);
     }
+
+    public function salvaAlteracao()
+    {
+        $id     = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+        $tab    = filter_input(INPUT_GET, 'tab', FILTER_SANITIZE_SPECIAL_CHARS);
+        $post   = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $mypost = array_map_recursive( fn($e) => html_entity_decode(htmlentities($e, ENT_QUOTES, 'UTF-8'), ENT_QUOTES , 'UTF-8') , $_POST);
+
+        $this->model->update($tab, $mypost, "id = $id");
+        
+        redirect('?p=' . $tab);
+    }
 }

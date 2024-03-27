@@ -143,7 +143,7 @@
             <br>
             
             <a class="btn btn-secondary" href="?p={{ p }}">Voltar</a>
-            <button type="submit" class="btn btn-success">Salvar</button>
+            <button type="submit" class="btn btn-success" id="btnSalvarAlteracao">Salvar</button>
         </div>
     </form>
 </div>
@@ -160,6 +160,16 @@
         mostra_logo_time('visitante', $('#select_time_visitante').val(), {{ times | json_encode | raw }});
 
         adiciona_onchange_functions_selects();
+
+        $('#btnSalvarAlteracao').click(function() {
+            let time_casa = parseInt($('#select_time_casa').val());
+            let time_visitante = parseInt($('#select_time_visitante').val());
+
+            if ( isNaN(time_casa) || isNaN(time_visitante) ) {
+                event.preventDefault();
+                alert('É obrigatório informar os times casa e visitante antes de salvar.');
+            }
+        });
     })
 
     function inicia_todos_selects() {
@@ -219,7 +229,7 @@
     }
 
     //Função para filtrar times de acordo com o campeonato escolhido.
-    function filtra_times(id_campeonato, times) {
+    function filtra_times(id_campeonato, times, alterado=false) {
         let select         = ['', ''];
         let cpos_times     = ['casa', 'visitante'];
         let desc_times     = ['da Casa', 'Visitante'];
@@ -240,7 +250,7 @@
                 
                 if ( campeonatos_time.indexOf(id_campeonato.toString()) !== -1 ) {
 
-                    if ( time.id == times_selected[opc] ) {
+                    if ( time.id == times_selected[opc] && !alterado ) {
                         select[i] += '<option value="' + time.id + '" selected>' + time.str_time + '</option>';
                     } else {
                         select[i] += '<option value="' + time.id + '">' + time.str_time + '</option>';
@@ -267,14 +277,17 @@
 
         // Esconde a div que contém os campos para seleçãod e times, até que seja selecionado um campeonato novamente.
         $('#row_times').attr('hidden', true);
+        $('#select_time_casa').remove();
+        $('#select_time_visitante').remove();
     }
 
     function tratativas_onchange_cpo_campeonato(id_campeonato) {
         // Remove a logo do campeonato inicialmente.
         $('#div_logo_campeonato').find('img').remove();
+        $('.logo_time').find('img').remove();
 
         // Filtra os times do campeonato selecionado.
-        filtra_times(id_campeonato, {{ times | json_encode | raw }});
+        filtra_times(id_campeonato, {{ times | json_encode | raw }}, true);
 
         // Mostra a logo do campeonato.
         mostra_logo_campeonato(id_campeonato, {{ campeonatos | json_encode | raw }});
@@ -364,4 +377,5 @@
             tratativas_onchange_cpo_time_visitante($(this).val());
         });
     }
+
 </script>
